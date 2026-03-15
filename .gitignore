@@ -1,3 +1,9 @@
 /Django/manage.py
 /Django/venv/
 /Django/eventhub_project/
+/Django/api/migrations/
+/Django/db.sqlite3
+
+# python cache
+/Django/__pycache__/
+/Django/api/__pycache__/

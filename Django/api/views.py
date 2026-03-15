@@ -4,10 +4,6 @@ from .models import Event, Participant, Registration
 from .serializers import EventSerializer, ParticipantSerializer, RegistrationSerializer
 
 class IsAdminOrReadOnly(permissions.BasePermission):
-    """
-    Permet la lecture à tous les utilisateurs authentifiés,
-    mais réserve l'écriture (POST, PUT, DELETE) aux administrateurs (is_staff).
-    """
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return request.user and request.user.is_authenticated
@@ -18,7 +14,7 @@ class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     permission_classes = [IsAdminOrReadOnly]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['date', 'status'] # Permet le filtrage sur /api/events/?date=...&status=...
+    filterset_fields = ['date', 'status']
 
 class ParticipantViewSet(viewsets.ModelViewSet):
     queryset = Participant.objects.all()

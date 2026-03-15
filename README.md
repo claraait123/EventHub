@@ -16,6 +16,7 @@ python -m venv venv
 
 # Installation de Django, Django REST Framework et CORS headers
 pip install django djangorestframework django-cors-headers
+pip install django-filter
 
 # Création du projet initial
 django-admin startproject eventhub_project .

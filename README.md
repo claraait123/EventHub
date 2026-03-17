@@ -80,6 +80,11 @@ python manage.py runserver
 
 L'API sera accessible sur : http://127.0.0.1:8000/api/
 
+### Installation pour Node/
+```
+npm install
+```
+
 
 ## Endpoints de l'API REST
 

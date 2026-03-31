@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/',
-});
+const apiUrl = import.meta.env.VITE_API_URL;
+fetch(`${apiUrl}/api/events`)
 
 // Ajoute le token à chaque requête automatiquement
 api.interceptors.request.use((config) => {

@@ -1,143 +1,56 @@
-# EventHub
-Event and Participant Management System
+# EventHub - Full-Stack Application (Labs 7-10)
+
+This is the final project for the Web Programming 2026 course (Dr. Alla Jammine). 
+EventHub is an Event and Participant Management System featuring a Django REST backend, a comparative Node.js backend, and a React SPA frontend.
 
 
-## Installation et Démarrage
+## Team Members
+* Clara AIT MOKHTAR
+* Vincent TAN
+* Maria AYDIN
 
-Windows
-```
-# Création du dossier Django et de l'environnement virtuel
-mkdir Django
+## Project Structure
+* `/Django` : Main Backend API (Django REST Framework)
+* `/Node` : Comparative Backend (Express.js)
+* `/frontend` : Single Page Application (React / Vite)
+
+
+## Installation & Setup Guide
+
+### 1. Django Backend (Lab 7)
+Open a terminal and navigate to the `Django` folder:
+
+```bash
 cd Django
+# Create and activate a virtual environment
 python -m venv venv
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
 
-# Activation de l'environnement (sur Windows)
-.\venv\Scripts\activate
+# Install dependencies
+pip install -r requirements.txt
 
-# Installation de Django, Django REST Framework et CORS headers
-pip install django djangorestframework django-cors-headers
-pip install django-filter
-
-# Création du projet initial
-django-admin startproject eventhub_project .
-```
-
-### Modifier Django/eventhub_project/settings.py
-
-Code initial :
-```
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles'
-]
-```
-
-Modification : 
-```
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    
-    'rest_framework',
-    'corsheaders',
-    'django_filters',
-    'api',
-]
-```
-
-### Modifier Django/eventhub_project/urls.py
-```
-from django.contrib import admin
-from django.urls import path, include
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
-]
-```
-
-### Suite de l'installation : 
-
-```
-# Appliquer les migrations
-python manage.py makemigrations api
+# Run migrations and start the server
 python manage.py migrate
-
-# Créer un compte administrateur
-python manage.py createsuperuser
-
-# Lancer le serveur
 python manage.py runserver
 ```
+*The Django API will be available at `http://127.0.0.1:8000/api/`*
 
-L'API sera accessible sur : http://127.0.0.1:8000/api/
+### 2. React Frontend (Lab 9)
+Open a **new** terminal and navigate to the `frontend` folder:
 
-### Installation pour Node/
-```
+```bash
+cd frontend
+
+# Install dependencies
 npm install
+
+# Start the development server
+npm run dev
 ```
+*The React SPA will be available at `http://localhost:5173/`*
 
+### 3. Testing the Application
+1. Access the frontend URL.
+2. Click on **Sign Up** to create a new user account, or use the Django admin (`http://127.0.0.1:8000/admin/`) to create a superuser.
+3. You can now create events, register participants, and test the filtering system.
 
-## Endpoints de l'API REST
-
-Toutes les routes principales sont disponibles sous le préfixe /api/ :
-
-### Événements
-GET /api/events/ : Lister les événements (paramètres acceptés : ?date=YYYY-MM-DD & ?status=planned)
-
-POST /api/events/ : Créer un événement (Admin requis)
-
-GET /api/events/{id}/ : Détails d'un événement
-
-PUT /api/events/{id}/ : Modifier un événement (Admin requis)
-
-DELETE /api/events/{id}/ : Supprimer un événement (Admin requis)
-
-### Participants
-GET /api/participants/ : Lister les participants
-
-POST /api/participants/ : Ajouter un participant (Admin requis)
-
-GET /api/participants/{id}/ : Détails d'un participant
-
-### Inscriptions
-GET /api/registrations/ : Lister les inscriptions
-
-POST /api/registrations/ : Inscrire un participant à un événement (Admin requis)
-
-
-## Interface administration
-
-L'interface d'administration Django est configurée pour une gestion facile des données sans passer par Postman.
-Accessible sur : http://127.0.0.1:8000/admin/
-
-
-## Fonctionnalités implémentées
-
-Conformément aux exigences du cahier des charges, cette API REST gère les fonctionnalités suivantes :
-
-- **Gestion des événements** : Création, lecture, mise à jour, suppression (CRUD) et filtrage par date ou par statut (prévu, en cours, terminé, annulé).
-
-- **Gestion des participants** : CRUD pour les profils des participants.
-
-- **Inscriptions** : Association *Many-to-Many* entre événements et participants. Une règle métier stricte empêche un participant de s'inscrire deux fois au même événement.
-
-- **Sécurité et Rôles** : 
-  - *Admin/Éditeur* : Accès complet en lecture et écriture.
-  - *Visiteur (Viewer)* : Accès en lecture seule.
-
-
-## Technologies utilisées
-
-- Python 3.x
-- Django
-- Django REST Framework (DRF)
-- django-filter (pour le filtrage des requêtes GET)

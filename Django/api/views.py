@@ -13,13 +13,25 @@ class IsAdminOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return request.user and request.user.is_authenticated
         return request.user and request.user.is_staff
+    
+class IsCreatorOrAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return obj.creator == request.user or request.user.is_staff
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsCreatorOrAdminOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['date', 'status']
+
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
 
 class ParticipantViewSet(viewsets.ModelViewSet):
     queryset = Participant.objects.all()

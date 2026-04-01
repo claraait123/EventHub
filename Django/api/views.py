@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+from django.shortcuts import get_object_or_404
 
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -63,3 +64,18 @@ def register_user(request):
     token, created = Token.objects.get_or_create(user=user)
     
     return Response({'token': token.key})
+
+@api_view(['GET'])
+@permission_classes([AllowAny]) 
+def get_user_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    
+
+    events = Event.objects.filter(creator=user)
+    events_data = EventSerializer(events, many=True).data
+    
+    return Response({
+        'username': user.username,
+        'profile_picture': f"https://api.dicebear.com/7.x/identicon/svg?seed={user.username}",
+        'events': events_data
+    })

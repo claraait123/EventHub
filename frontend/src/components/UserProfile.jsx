@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar'; 
 
@@ -8,22 +8,29 @@ function UserProfile() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
+  const navigate = useNavigate();
   
-  // 1. NOUVEAU : État pour mémoriser le filtre choisi par l'utilisateur
+
   const [statusFilter, setStatusFilter] = useState('all'); 
 
   useEffect(() => {
-    const fetchProfile = async () => {
+  const fetchData = async () => {
       try {
-        const response = await api.get(`/profiles/${username}/`);
-        setProfile(response.data);
+        const [profileRes, userRes] = await Promise.all([
+          api.get(`/profiles/${username}/`),
+          api.get('/me/')
+        ]);
+        setProfile(profileRes.data);
+        setCurrentUser(userRes.data);
       } catch (err) {
         setError('User not found.');
       } finally {
         setLoading(false);
       }
     };
-    fetchProfile();
+
+    fetchData();
   }, [username]);
 
   if (loading) return <div style={{ textAlign: 'center', marginTop: '50px' }}>Loading profile...</div>;
@@ -83,22 +90,34 @@ function UserProfile() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {filteredEvents.map(event => {
               const statusColors = getStatusStyle(event.status);
+              const canEdit = currentUser && (currentUser.is_staff || currentUser.id === event.creator);
 
               return (
                 <div key={event.id} style={{ border: '1px solid #e1e4e8', borderRadius: '8px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', backgroundColor: '#fafbfc' }}>
-                  <h4 style={{ margin: '0 0 15px 0', color: '#0366d6', fontSize: '1.2rem' }}>{event.title}</h4>
                   
+                  {/* Titre + bouton Edit */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '15px' }}>
+                    <h4 style={{ margin: 0, color: '#0366d6', fontSize: '1.2rem' }}>{event.title}</h4>
+                    {canEdit && (
+                      <button
+                        onClick={() => navigate(`/events/${event.id}/edit`)}
+                        style={{ padding: '4px 12px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                      >
+                        ✏️ Edit
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Infos de l'événement */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', fontSize: '14px', color: '#586069' }}>
                     <p style={{ margin: 0 }}><strong>Author:</strong> {profile.username}</p>
                     <p style={{ margin: 0 }}><strong>Date:</strong> {event.date}</p>
-                    
-                    {/* 4. NOUVEAU : Affichage clair du statut sous forme de badge coloré */}
                     <p style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <strong>Status:</strong> 
-                      <span style={{ 
-                        textTransform: 'capitalize', 
-                        fontWeight: 'bold', 
-                        padding: '4px 10px', 
+                      <strong>Status:</strong>
+                      <span style={{
+                        textTransform: 'capitalize',
+                        fontWeight: 'bold',
+                        padding: '4px 10px',
                         borderRadius: '12px',
                         backgroundColor: statusColors.bg,
                         color: statusColors.text,
@@ -108,7 +127,7 @@ function UserProfile() {
                       </span>
                     </p>
                   </div>
-                  
+
                   {event.description && (
                     <div style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #eaecef', color: '#24292e', fontSize: '14px' }}>
                       {event.description}

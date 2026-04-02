@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -12,7 +12,7 @@ function Register() {
     e.preventDefault();
     try {
       // Appel à la nouvelle route de création de compte
-      const response = await axios.post('http://127.0.0.1:8000/api/register/', {
+      const response = await api.post('/register/', {
         username,
         password,
       });

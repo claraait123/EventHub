@@ -79,3 +79,11 @@ def get_user_profile(request, username):
         'profile_picture': f"https://api.dicebear.com/7.x/identicon/svg?seed={user.username}",
         'events': events_data
     })
+
+@api_view(['GET'])
+def get_current_user(request):
+    return Response({
+        'id': request.user.id,
+        'username': request.user.username,
+        'is_staff': request.user.is_staff,
+    })

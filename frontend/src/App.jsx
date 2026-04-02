@@ -5,6 +5,7 @@ import EventDetails from './components/EventDetails';
 import ParticipantDashboard from './components/ParticipantDashboard';
 import Register from './components/Register';
 import UserProfile from './components/UserProfile';
+import AddEvent from './components/AddEvent';
 
 // Composant de protection des routes
 const ProtectedRoute = ({ children }) => {
@@ -22,7 +23,9 @@ function App() {
         {/* Routes protégées */}
         <Route path="/events" element={<ProtectedRoute><EventList /></ProtectedRoute>} />
         <Route path="/events/:id" element={<ProtectedRoute><EventDetails /></ProtectedRoute>} />
+        <Route path="/add-event" element={<ProtectedRoute><AddEvent /></ProtectedRoute>} />
         <Route path="/participants" element={<ProtectedRoute><ParticipantDashboard /></ProtectedRoute>} />
+        
         
         <Route path="/:username" element={<UserProfile />} />
 

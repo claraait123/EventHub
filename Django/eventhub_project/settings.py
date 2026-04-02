@@ -26,9 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0cuc%9ikmswm*+kx@=hk3a3x^-ct$m=h0(1xa+wz-p1a5hf25a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
+DEBUG =  False
+ALLOWED_HOSTS = ['eventhub-backend-qulw.onrender.com']
 
 
 # Application definition

@@ -58,6 +58,18 @@ function EventList() {
     }
   };
 
+  const handleDelete = async (eventId, eventTitle) => {
+    const confirmed = window.confirm(`Are you sure you want to delete "${eventTitle}"? This action cannot be undone.`);
+    if (!confirmed) return;
+
+    try {
+      await api.delete(`/events/${eventId}/`);
+      setEvents(prev => prev.filter(e => e.id !== eventId));
+    } catch (err) {
+      alert('Could not delete event.');
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -111,46 +123,64 @@ function EventList() {
             );
 
             return (
-              <div key={event.id} style={{ border: '1px solid #e1e4e8', borderRadius: '8px', padding: '16px', backgroundColor: '#fafbfc', boxShadow: '0 2px 6px rgba(0,0,0,0.04)' }}>
-                
-                {/* En-tête de la carte avec titre + bouton Edit */}
+              <div
+                key={event.id}
+                onClick={() => navigate(`/events/${event.id}`)}
+                style={{
+                  border: '1px solid #e1e4e8', borderRadius: '8px', padding: '16px',
+                  backgroundColor: '#fafbfc', boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+                  cursor: 'pointer',  // ← indique que c'est cliquable
+                  transition: 'box-shadow 0.2s, background-color 0.2s'
+                }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f0f4ff'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fafbfc'}
+              >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <h4 style={{ margin: 0, color: '#0366d6' }}>{event.title}</h4>
-                  
-                  {/* Bouton Edit visible seulement si autorisé */}
-                  {canEdit && (
-                    <button
-                      onClick={() => navigate(`/events/${event.id}/edit`)}
-                      style={{ padding: '4px 12px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
-                    >
-                      ✏️ Edit
-                    </button>
-                  )}
 
-                  {/* Ne pas afficher Join/Leave sur ses propres événements */}
-                  {currentUser && event.creator !== currentUser.id && (
-                    joinedEventIds.has(event.id) ? (
-                      <button
-                        onClick={() => handleLeave(event.id)}
-                        style={{ padding: '4px 12px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
-                      >
-                        ✖ Leave
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleJoin(event.id)}
-                        style={{ padding: '4px 12px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
-                      >
-                        ✚ Join
-                      </button>
-                    )
-                  )}
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    {canEdit && (
+                      <>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); navigate(`/events/${event.id}/edit`); }}
+                          style={{ padding: '4px 12px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleDelete(event.id, event.title); }}
+                          style={{ padding: '4px 12px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                        >
+                          🗑️ Delete
+                        </button>
+                      </>
+                    )}
+
+                    {currentUser && event.creator !== currentUser.id && (
+                      joinedEventIds.has(event.id) ? (
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleLeave(event.id); }}
+                          style={{ padding: '4px 12px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                        >
+                          ✖ Leave
+                        </button>
+                      ) : (
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleJoin(event.id); }}
+                          style={{ padding: '4px 12px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                        >
+                          ✚ Join
+                        </button>
+                      )
+                    )}
+                  </div>
                 </div>
 
-                <p style={{ margin: '8px 0 4px 0', fontSize: '14px', color: '#586069' }}>
+                <p style={{ margin: '8px 0 0 0', fontSize: '14px', color: '#586069' }}>
                   <strong>Date:</strong> {event.date} &nbsp;|&nbsp; <strong>Status:</strong> {event.status}
                 </p>
-                <Link to={`/events/${event.id}`} style={{ fontSize: '14px' }}>View details →</Link>
+
+                {/* Plus de <Link> ici */}
               </div>
             );
           })}

@@ -11,6 +11,7 @@ function EventList() {
   const [statusFilter, setStatusFilter] = useState('');
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
+  const [joinedEventIds, setJoinedEventIds] = useState(new Set());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,12 +19,14 @@ function EventList() {
         setLoading(true);
         const url = statusFilter ? `/events/?status=${statusFilter}` : '/events/';
         // On charge les événements ET l'utilisateur courant en parallèle
-        const [eventsRes, userRes] = await Promise.all([
+        const [eventsRes, userRes, myEventsRes] = await Promise.all([
           api.get(url),
-          api.get('/me/')
+          api.get('/me/'),
+          api.get('/my-events/')
         ]);
         setEvents(eventsRes.data);
-        setCurrentUser(userRes.data); 
+        setCurrentUser(userRes.data);
+        setJoinedEventIds(new Set(myEventsRes.data.map(e => e.id)));
       } catch (err) {
         setError('Error loading events.');
       } finally {
@@ -36,6 +39,24 @@ function EventList() {
   const filteredEvents = events.filter(event =>
     event.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleJoin = async (eventId) => {
+    try {
+      await api.post(`/events/${eventId}/join/`);
+      setJoinedEventIds(prev => new Set([...prev, eventId]));
+    } catch (err) {
+      alert(err.response?.data?.error || 'Could not join event.');
+    }
+  };
+
+  const handleLeave = async (eventId) => {
+    try {
+      await api.post(`/events/${eventId}/leave/`);
+      setJoinedEventIds(prev => { const next = new Set(prev); next.delete(eventId); return next; });
+    } catch (err) {
+      alert('Could not leave event.');
+    }
+  };
 
   return (
     <div>
@@ -104,6 +125,25 @@ function EventList() {
                     >
                       ✏️ Edit
                     </button>
+                  )}
+
+                  {/* Ne pas afficher Join/Leave sur ses propres événements */}
+                  {currentUser && event.creator !== currentUser.id && (
+                    joinedEventIds.has(event.id) ? (
+                      <button
+                        onClick={() => handleLeave(event.id)}
+                        style={{ padding: '4px 12px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                      >
+                        ✖ Leave
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleJoin(event.id)}
+                        style={{ padding: '4px 12px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                      >
+                        ✚ Join
+                      </button>
+                    )
                   )}
                 </div>
 

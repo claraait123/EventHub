@@ -7,6 +7,7 @@ import Register from './components/Register';
 import UserProfile from './components/UserProfile';
 import AddEvent from './components/AddEvent';
 import EditEvent from './components/EditEvent';
+import MyEvents from './components/MyEvents';
 
 // Composant de protection des routes
 const ProtectedRoute = ({ children }) => {
@@ -30,6 +31,7 @@ function App() {
         
         <Route path="/:username" element={<UserProfile />} />
         <Route path="/events/:id/edit" element={<ProtectedRoute><EditEvent /></ProtectedRoute>} />
+        <Route path="/my-events" element={<ProtectedRoute><MyEvents /></ProtectedRoute>} />
 
         {/* Redirection par défaut */}
         <Route path="*" element={<Navigate to="/events" />} />

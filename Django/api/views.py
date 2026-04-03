@@ -87,3 +87,27 @@ def get_current_user(request):
         'username': request.user.username,
         'is_staff': request.user.is_staff,
     })
+
+@api_view(['POST'])
+def join_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    
+    if event.creator == request.user:
+        return Response({'error': "You can't join your own event."}, status=400)
+    if request.user in event.members.all():
+        return Response({'error': 'You already joined this event.'}, status=400)
+    
+    event.members.add(request.user)
+    return Response({'status': 'joined'})
+
+@api_view(['POST'])
+def leave_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    event.members.remove(request.user)
+    return Response({'status': 'left'})
+
+@api_view(['GET'])
+def my_events(request):
+    events = request.user.joined_events.all()
+    data = EventSerializer(events, many=True).data
+    return Response(data)

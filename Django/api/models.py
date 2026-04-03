@@ -32,7 +32,20 @@ class Registration(models.Model):
     registration_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('event', 'participant') # Règle métier : pas de double inscription
+        unique_together = ('event', 'participant')
 
     def __str__(self):
         return f"{self.participant} -> {self.event}"
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    avatar_seed = models.CharField(max_length=100, blank=True)
+    avatar_image = models.TextField(blank=True)  # stocke la base64 de l'image
+
+    def get_avatar_url(self):
+        # Si une vraie image a été uploadée, on la retourne directement
+        if self.avatar_image:
+            return self.avatar_image
+        # Sinon on utilise DiceBear avec le seed (ou le pseudo par défaut)
+        seed = self.avatar_seed if self.avatar_seed else self.user.username
+        return f"https://api.dicebear.com/7.x/identicon/svg?seed={seed}"

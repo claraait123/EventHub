@@ -34,8 +34,25 @@ function EventDetails() {
     currentUser.is_staff || currentUser.id === event.creator
   );
 
+
   if (loading) return <div><Navbar /><p>Loading...</p></div>;
   if (!event) return <div><Navbar /><p>Event not found.</p></div>;
+
+  const handleRemove = async (memberId, memberUsername) => {
+    const confirmed = window.confirm(`Remove ${memberUsername} from this event?`);
+    if (!confirmed) return;
+
+    try {
+      await api.post(`/events/${id}/remove/${memberId}/`);
+      // Met à jour la liste localement sans recharger la page
+      setEvent(prev => ({
+        ...prev,
+        members: prev.members.filter(m => m.id !== memberId)
+      }));
+    } catch (err) {
+      alert('Could not remove participant.');
+    }
+  };
 
   return (
     <div>
@@ -57,6 +74,18 @@ function EventDetails() {
           )}
         </div>
 
+        {/* Auteur de l'événement */}
+        <p style={{ margin: '8px 0 16px 0', color: '#586069', fontSize: '14px' }}>
+          Created by{' '}
+          <span
+            onClick={() => navigate(`/${event.creator_username}`)}
+            style={{ color: '#0366d6', cursor: 'pointer', fontWeight: '500' }}
+            onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
+            onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
+          >
+            {event.creator_username}
+          </span>
+        </p>
         <p><strong>Date:</strong> {event.date}</p>
         <p><strong>Status:</strong> {event.status}</p>
         <p><strong>Description:</strong> {event.description || 'No description provided.'}</p>
@@ -67,22 +96,39 @@ function EventDetails() {
             {event.members.map(member => (
               <li
                 key={member.id}
-                onClick={() => navigate(`/${member.username}`)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '10px',
                   padding: '8px 12px', borderRadius: '6px', border: '1px solid #e1e4e8',
-                  cursor: 'pointer', backgroundColor: '#fafbfc',
-                  transition: 'background-color 0.2s'
+                  backgroundColor: '#fafbfc',
                 }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f0f4ff'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fafbfc'}
               >
+                {/* Avatar + pseudo cliquable vers le profil */}
                 <img
                   src={`https://api.dicebear.com/7.x/identicon/svg?seed=${member.username}`}
                   alt={member.username}
                   style={{ width: '28px', height: '28px', borderRadius: '50%' }}
                 />
-                <span style={{ fontWeight: '500' }}>{member.username}</span>
+                <span
+                  onClick={() => navigate(`/${member.username}`)}
+                  style={{ fontWeight: '500', cursor: 'pointer', flex: 1 }}
+                  onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
+                  onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
+                >
+                  {member.username}
+                </span>
+
+                {/* Bouton Remove : visible uniquement pour le créateur et les admins */}
+                {canEdit && (
+                  <button
+                    onClick={() => handleRemove(member.id, member.username)}
+                    style={{
+                      padding: '3px 10px', backgroundColor: '#dc3545', color: 'white',
+                      border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px'
+                    }}
+                  >
+                    Remove
+                  </button>
+                )}
               </li>
             ))}
           </ul>

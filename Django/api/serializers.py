@@ -33,3 +33,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
         if Registration.objects.filter(event=event, participant=participant).exists():
             raise serializers.ValidationError("Ce participant est déjà inscrit à cet événement.")
         return data
+
+class EventSerializer(serializers.ModelSerializer):
+    members = MemberSerializer(many=True, read_only=True)
+    creator_username = serializers.CharField(source='creator.username', read_only=True)
+
+    class Meta:
+        model = Event
+        fields = '__all__'
+        read_only_fields = ['creator', 'members']

@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Event, Participant, Registration
+from .models import Event, Participant, Registration, UserProfile
 from .serializers import EventSerializer, ParticipantSerializer, RegistrationSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import authenticate
 
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -111,3 +112,90 @@ def my_events(request):
     events = request.user.joined_events.all()
     data = EventSerializer(events, many=True).data
     return Response(data)
+
+@api_view(['POST'])
+def remove_member(request, event_id, user_id):
+    event = get_object_or_404(Event, id=event_id)
+    
+    # Seuls le créateur et les admins peuvent retirer un participant
+    if event.creator != request.user and not request.user.is_staff:
+        return Response({'error': 'Not allowed.'}, status=403)
+    
+    user_to_remove = get_object_or_404(User, id=user_id)
+    event.members.remove(user_to_remove)
+    return Response({'status': 'removed'})
+
+@api_view(['GET', 'PATCH'])
+def user_settings(request):
+    user = request.user
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+
+    if request.method == 'GET':
+        return Response({
+            'username': user.username,
+            'avatar_seed': profile.avatar_seed,
+            'avatar_url': profile.get_avatar_url(),
+        })
+
+    if request.method == 'PATCH':
+        new_username = request.data.get('username')
+        new_seed = request.data.get('avatar_seed')
+        new_image = request.data.get('avatar_image')  # base64
+
+        if new_username:
+            if User.objects.filter(username=new_username).exclude(id=user.id).exists():
+                return Response({'error': 'This username is already taken.'}, status=400)
+            user.username = new_username
+            user.save()
+
+        if new_seed is not None:
+            profile.avatar_seed = new_seed
+            # Si on remet un seed, on efface l'image uploadée
+            profile.avatar_image = ''
+
+        if new_image:
+            # Vérifie que c'est bien une image base64 (commence par data:image/)
+            if not new_image.startswith('data:image/'):
+                return Response({'error': 'Invalid image format.'}, status=400)
+            profile.avatar_image = new_image
+            profile.avatar_seed = ''
+
+        profile.save()
+
+        return Response({
+            'username': user.username,
+            'avatar_seed': profile.avatar_seed,
+            'avatar_url': profile.get_avatar_url(),
+        })
+
+@api_view(['POST'])
+def change_password(request):
+    user = request.user
+    current = request.data.get('current_password')
+    new = request.data.get('new_password')
+
+    if not current or not new:
+        return Response({'error': 'Both fields are required.'}, status=400)
+    if not user.check_password(current):
+        return Response({'error': 'Current password is incorrect.'}, status=400)
+    if len(new) < 8:
+        return Response({'error': 'New password must be at least 8 characters.'}, status=400)
+
+    user.set_password(new)
+    user.save()
+    Token.objects.filter(user=user).delete()
+    token = Token.objects.create(user=user)
+    return Response({'message': 'Password updated successfully.', 'token': token.key})
+
+@api_view(['POST'])
+def delete_account(request):
+    user = request.user
+    password = request.data.get('password')
+
+    if not password:
+        return Response({'error': 'Password is required.'}, status=400)
+    if not user.check_password(password):
+        return Response({'error': 'Incorrect password.'}, status=400)
+
+    user.delete()
+    return Response({'message': 'Account deleted successfully.'})

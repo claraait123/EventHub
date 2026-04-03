@@ -129,7 +129,7 @@ function EventList() {
                 style={{
                   border: '1px solid #e1e4e8', borderRadius: '8px', padding: '16px',
                   backgroundColor: '#fafbfc', boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-                  cursor: 'pointer',  // ← indique que c'est cliquable
+                  cursor: 'pointer', 
                   transition: 'box-shadow 0.2s, background-color 0.2s'
                 }}
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f0f4ff'}
@@ -137,6 +137,19 @@ function EventList() {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <h4 style={{ margin: 0, color: '#0366d6' }}>{event.title}</h4>
+
+                  <p style={{ margin: '6px 0 4px 0', fontSize: '13px', color: '#586069' }}>
+                    By{' '}
+                    <span
+                      onClick={(e) => { e.stopPropagation(); navigate(`/${event.creator_username}`); }}
+                      style={{ color: '#0366d6', cursor: 'pointer', fontWeight: '500' }}
+                      onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
+                      onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
+                    >
+                      {event.creator_username}
+                    </span>
+                    {' '}· {event.date} · {event.status}
+                  </p>
 
                   <div style={{ display: 'flex', gap: '6px' }}>
                     {canEdit && (
@@ -175,12 +188,6 @@ function EventList() {
                     )}
                   </div>
                 </div>
-
-                <p style={{ margin: '8px 0 0 0', fontSize: '14px', color: '#586069' }}>
-                  <strong>Date:</strong> {event.date} &nbsp;|&nbsp; <strong>Status:</strong> {event.status}
-                </p>
-
-                {/* Plus de <Link> ici */}
               </div>
             );
           })}

@@ -19,18 +19,24 @@ function Settings() {
   const [imagePreview, setImagePreview] = useState('');
 
   useEffect(() => {
-    const fetch = async () => {
-      try {
+    const fetchSettings = async () => {
+        try {
         const res = await api.get('/settings/');
         setUsername(res.data.username);
         setAvatarSeed(res.data.avatar_seed);
         setAvatarUrl(res.data.avatar_url);
-      } finally {
+
+        // Si l'avatar stocké est une image uploadée (base64), on remet le bon mode
+        if (res.data.avatar_url && res.data.avatar_url.startsWith('data:image/')) {
+            setAvatarMode('upload');
+            setImagePreview(res.data.avatar_url);
+        }
+        } finally {
         setLoading(false);
-      }
+        }
     };
-    fetch();
-  }, []);
+    fetchSettings();
+    }, []);
 
   // Prévisualisation de l'avatar en temps réel
   const previewUrl = `https://api.dicebear.com/7.x/identicon/svg?seed=${avatarSeed || username}`;
@@ -135,7 +141,7 @@ function Settings() {
             {/* Aperçu de l'avatar */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
             <img
-                src={avatarMode === 'upload' && imagePreview ? imagePreview : previewUrl}
+                src={avatarMode === 'upload' && imagePreview ? imagePreview : avatarUrl || previewUrl}
                 alt="avatar preview"
                 style={{ width: '72px', height: '72px', borderRadius: '50%', border: '2px solid #e1e4e8', objectFit: 'cover' }}
             />

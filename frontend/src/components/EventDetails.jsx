@@ -58,7 +58,7 @@ function EventDetails() {
     <div>
       <Navbar />
       <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-        <Link to="/events">← Back to Events</Link>
+        <Link to="/events">Click here to see more events</Link>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
           <h2 style={{ margin: 0 }}>{event.title}</h2>
@@ -104,7 +104,7 @@ function EventDetails() {
               >
                 {/* Avatar + pseudo cliquable vers le profil */}
                 <img
-                  src={`https://api.dicebear.com/7.x/identicon/svg?seed=${member.username}`}
+                  src={member.avatar_url}
                   alt={member.username}
                   style={{ width: '28px', height: '28px', borderRadius: '50%' }}
                 />

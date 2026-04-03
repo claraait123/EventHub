@@ -67,17 +67,16 @@ def register_user(request):
     return Response({'token': token.key})
 
 @api_view(['GET'])
-@permission_classes([AllowAny]) 
+@permission_classes([AllowAny])
 def get_user_profile(request, username):
     user = get_object_or_404(User, username=username)
-    
-
+    profile, _ = UserProfile.objects.get_or_create(user=user)
     events = Event.objects.filter(creator=user)
     events_data = EventSerializer(events, many=True).data
-    
+
     return Response({
         'username': user.username,
-        'profile_picture': f"https://api.dicebear.com/7.x/identicon/svg?seed={user.username}",
+        'profile_picture': profile.get_avatar_url(),
         'events': events_data
     })
 

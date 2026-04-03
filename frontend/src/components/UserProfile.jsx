@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar'; 
+import EventCard from './EventCard';
 
 function UserProfile() {
   const { username } = useParams();
@@ -10,6 +11,7 @@ function UserProfile() {
   const [error, setError] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
+  const [joinedEventIds, setJoinedEventIds] = useState(new Set());
   
 
   const [statusFilter, setStatusFilter] = useState('all'); 
@@ -17,12 +19,14 @@ function UserProfile() {
   useEffect(() => {
   const fetchData = async () => {
       try {
-        const [profileRes, userRes] = await Promise.all([
+        const [profileRes, userRes, myEventsRes] = await Promise.all([
           api.get(`/profiles/${username}/`),
-          api.get('/me/')
+          api.get('/me/'),
+          api.get('/my-events/')
         ]);
         setProfile(profileRes.data);
         setCurrentUser(userRes.data);
+        setJoinedEventIds(new Set(myEventsRes.data.map(e => e.id)));
       } catch (err) {
         setError('User not found.');
       } finally {
@@ -84,60 +88,21 @@ function UserProfile() {
         </div>
 
         {/* Liste des événements (Utilisation de filteredEvents au lieu de profile.events) */}
-        {filteredEvents.length === 0 ? (
-          <p style={{ color: '#777', fontStyle: 'italic' }}>No events found for this status.</p>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {filteredEvents.map(event => {
-              const statusColors = getStatusStyle(event.status);
-              const canEdit = currentUser && (currentUser.is_staff || currentUser.id === event.creator);
-
-              return (
-                <div key={event.id} style={{ border: '1px solid #e1e4e8', borderRadius: '8px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', backgroundColor: '#fafbfc' }}>
-                  
-                  {/* Titre + bouton Edit */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '15px' }}>
-                    <h4 style={{ margin: 0, color: '#0366d6', fontSize: '1.2rem' }}>{event.title}</h4>
-                    {canEdit && (
-                      <button
-                        onClick={() => navigate(`/events/${event.id}/edit`)}
-                        style={{ padding: '4px 12px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
-                      >
-                        ✏️ Edit
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Infos de l'événement */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', fontSize: '14px', color: '#586069' }}>
-                    <p style={{ margin: 0 }}><strong>Author:</strong> {profile.username}</p>
-                    <p style={{ margin: 0 }}><strong>Date:</strong> {event.date}</p>
-                    <p style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <strong>Status:</strong>
-                      <span style={{
-                        textTransform: 'capitalize',
-                        fontWeight: 'bold',
-                        padding: '4px 10px',
-                        borderRadius: '12px',
-                        backgroundColor: statusColors.bg,
-                        color: statusColors.text,
-                        fontSize: '12px'
-                      }}>
-                        {event.status}
-                      </span>
-                    </p>
-                  </div>
-
-                  {event.description && (
-                    <div style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #eaecef', color: '#24292e', fontSize: '14px' }}>
-                      {event.description}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          {filteredEvents.map(event => (
+            <EventCard
+              key={event.id}
+              event={event}
+              currentUser={currentUser}
+              joinedEventIds={joinedEventIds}
+              setJoinedEventIds={setJoinedEventIds}
+              onDelete={(id) => setProfile(prev => ({
+                ...prev,
+                events: prev.events.filter(e => e.id !== id)
+              }))}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

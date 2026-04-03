@@ -33,7 +33,6 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
 ```
-*The Django API will be available at `http://127.0.0.1:8000/api/`*
 
 ### 2. React Frontend
 Open a **new** terminal and navigate to the `frontend` folder:
@@ -47,7 +46,7 @@ npm install
 # Start the development server
 npm run dev
 ```
-*The React SPA will be available at `http://localhost:5173/`*
+
 
 ### 3. Testing the Application
 1. Access the frontend URL.

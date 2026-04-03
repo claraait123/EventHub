@@ -61,15 +61,33 @@ function EventDetails() {
         <p><strong>Status:</strong> {event.status}</p>
         <p><strong>Description:</strong> {event.description || 'No description provided.'}</p>
 
-        <h3>Registered Participants</h3>
-        {event.registrations && event.registrations.length > 0 ? (
-          <ul>
-            {event.registrations.map(reg => (
-              <li key={reg.id}>Registration ID: {reg.id}</li>
+        <h3>Registered Participants ({event.members ? event.members.length : 0})</h3>
+        {event.members && event.members.length > 0 ? (
+          <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {event.members.map(member => (
+              <li
+                key={member.id}
+                onClick={() => navigate(`/${member.username}`)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '10px',
+                  padding: '8px 12px', borderRadius: '6px', border: '1px solid #e1e4e8',
+                  cursor: 'pointer', backgroundColor: '#fafbfc',
+                  transition: 'background-color 0.2s'
+                }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f0f4ff'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fafbfc'}
+              >
+                <img
+                  src={`https://api.dicebear.com/7.x/identicon/svg?seed=${member.username}`}
+                  alt={member.username}
+                  style={{ width: '28px', height: '28px', borderRadius: '50%' }}
+                />
+                <span style={{ fontWeight: '500' }}>{member.username}</span>
+              </li>
             ))}
           </ul>
         ) : (
-          <p>No participants registered yet.</p>
+          <p style={{ color: '#777', fontStyle: 'italic' }}>No participants yet. Be the first to join!</p>
         )}
       </div>
     </div>

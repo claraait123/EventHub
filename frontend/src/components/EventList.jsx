@@ -5,11 +5,12 @@ import Navbar from './Navbar';
 
 function EventList() {
   const [events, setEvents] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null); // <-- AJOUT
+  const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState('');
-  const navigate = useNavigate(); // <-- AJOUT
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +23,7 @@ function EventList() {
           api.get('/me/')
         ]);
         setEvents(eventsRes.data);
-        setCurrentUser(userRes.data); // <-- AJOUT
+        setCurrentUser(userRes.data); 
       } catch (err) {
         setError('Error loading events.');
       } finally {
@@ -31,16 +32,36 @@ function EventList() {
     };
     fetchData();
   }, [statusFilter]);
+  
+  const filteredEvents = events.filter(event =>
+    event.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div>
       <Navbar />
       <div style={{ padding: '20px' }}>
-        <h2>Events</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <h2 style={{ margin: 0 }}>Events</h2>
+          <Link to="/add-event" style={{ padding: '8px 16px', backgroundColor: '#28a745', color: 'white', borderRadius: '4px', textDecoration: 'none', fontSize: '14px' }}>
+            + New Event
+          </Link>
+        </div>
 
-        <div style={{ marginBottom: '20px' }}>
-          <label>Filter by status: </label>
-          <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
+        {/* Barre de recherche + filtre statut sur la même ligne */}
+        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+          <input
+            type="text"
+            placeholder="Search by title..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ flex: 1, padding: '8px 12px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '14px' }}
+          />
+          <select
+            onChange={(e) => setStatusFilter(e.target.value)}
+            value={statusFilter}
+            style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', cursor: 'pointer' }}
+          >
             <option value="">All statuses</option>
             <option value="planned">Planned</option>
             <option value="ongoing">Ongoing</option>
@@ -51,10 +72,18 @@ function EventList() {
 
         {loading && <p>Loading...</p>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
+        {!loading && filteredEvents.length === 0 && (
+          <p style={{ color: '#777', fontStyle: 'italic' }}>
+            {searchQuery ? `No events matching "${searchQuery}".` : 'No events found.'}
+          </p>
+        )}
+
+        {loading && <p>Loading...</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         {!loading && events.length === 0 && <p>No events found.</p>}
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-          {events.map(event => {
+          {filteredEvents.map(event =>  {
             // Vrai si l'utilisateur est l'auteur OU admin
             const canEdit = currentUser && (
               currentUser.is_staff || currentUser.id === event.creator

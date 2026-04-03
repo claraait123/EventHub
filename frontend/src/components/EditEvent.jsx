@@ -16,22 +16,37 @@ function EditEvent() {
 
   // Chargement des données existantes de l'événement au montage du composant
   useEffect(() => {
-    const fetchEvent = async () => {
-      try {
-        const response = await api.get(`/events/${id}/`);
-        const event = response.data;
-        setTitle(event.title);
-        setDescription(event.description || '');
-        setDate(event.date);
-        setStatus(event.status);
-      } catch (err) {
-        setError('Could not load event data.');
-      } finally {
-        setLoading(false);
+  const fetchData = async () => {
+    try {
+      // Chargement de l'événement ET de l'utilisateur courant en parallèle
+      const [eventRes, userRes] = await Promise.all([
+        api.get(`/events/${id}/`),
+        api.get('/me/')
+      ]);
+
+      const event = eventRes.data;
+      const user = userRes.data;
+
+      // Vérification des droits AVANT d'afficher le formulaire
+      if (!user.is_staff && user.id !== event.creator) {
+        navigate('/events'); // Redirige sans afficher le formulaire
+        return;
       }
-    };
-    fetchEvent();
-  }, [id]);
+
+      // Autorisé : on remplit le formulaire
+      setTitle(event.title);
+      setDescription(event.description || '');
+      setDate(event.date);
+      setStatus(event.status);
+
+    } catch (err) {
+      setError('Could not load event data.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchData();
+}, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

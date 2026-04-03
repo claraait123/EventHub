@@ -7,21 +7,19 @@ function Register() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      // Appel à la nouvelle route de création de compte
-      const response = await api.post('/register/', {
-        username,
-        password,
-      });
-      
-      // Stockage du token et connexion automatique
+      const response = await api.post('/register/', { username, password });
       localStorage.setItem('token', response.data.token);
       navigate('/events');
     } catch (err) {
-      setError(err.response?.data?.error || "Erreur lors de l'inscription.");
+      setError(err.response?.data?.error || 'Registration failed.');
+    } finally {
+      setIsLoading(false); 
     }
   };
 
@@ -45,8 +43,12 @@ function Register() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" style={{ padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '3px' }}>
-          S'inscrire
+        <button
+          type="submit"
+          disabled={isLoading}
+          style={{ padding: '10px', backgroundColor: isLoading ? '#6c757d' : '#28a745', color: 'white', border: 'none', borderRadius: '3px', cursor: isLoading ? 'not-allowed' : 'pointer' }}
+        >
+          {isLoading ? 'Loading...' : 'Sign Up'}
         </button>
       </form>
 

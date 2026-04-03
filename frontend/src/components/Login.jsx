@@ -7,18 +7,19 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      const response = await api.post('/login/', {
-        username,
-        password,
-      });
+      const response = await api.post('/login/', { username, password });
       localStorage.setItem('token', response.data.token);
       navigate('/events');
     } catch (err) {
-      setError('Identifiants incorrects.');
+      setError('Incorrect credentials.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -42,8 +43,12 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" style={{ padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '3px' }}>
-          Se connecter
+        <button
+          type="submit"
+          disabled={isLoading}
+          style={{ padding: '10px', backgroundColor: isLoading ? '#6c757d' : '#007bff', color: 'white', border: 'none', borderRadius: '3px', cursor: isLoading ? 'not-allowed' : 'pointer' }}
+        >
+          {isLoading ? 'Loading...' : 'Sign In'}
         </button>
       </form>
 

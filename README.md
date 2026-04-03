@@ -1,4 +1,4 @@
-# EventHub - Full-Stack Application (Labs 7-10)
+# EventHub - Full-Stack Application
 
 This is the final project for the Web Programming 2026 course (Dr. Alla Jammine). 
 EventHub is an Event and Participant Management System featuring a Django REST backend, a comparative Node.js backend, and a React SPA frontend.
@@ -17,7 +17,7 @@ EventHub is an Event and Participant Management System featuring a Django REST b
 
 ## Installation & Setup Guide
 
-### 1. Django Backend (Lab 7)
+### 1. Django Backend
 Open a terminal and navigate to the `Django` folder:
 
 ```bash
@@ -35,7 +35,7 @@ python manage.py runserver
 ```
 *The Django API will be available at `http://127.0.0.1:8000/api/`*
 
-### 2. React Frontend (Lab 9)
+### 2. React Frontend
 Open a **new** terminal and navigate to the `frontend` folder:
 
 ```bash

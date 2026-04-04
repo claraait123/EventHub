@@ -35,7 +35,7 @@ function Footer() {
       </div>
 
       <p className="footer-copyright">
-        © {year} EventHub — Projet universitaire M1
+        © {year} EventHub — Web Programming Project M1
       </p>
     </footer>
   );

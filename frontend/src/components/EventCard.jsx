@@ -43,10 +43,10 @@ function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDe
   };
 
   const statusColors = {
-    planned:   { bg: '#e6ffed', text: '#28a745' },
-    ongoing:   { bg: '#fffdef', text: '#b08800' },
-    completed: { bg: '#f1f8ff', text: '#0366d6' },
-    cancelled: { bg: '#ffeef0', text: '#cb2431' },
+    planned:   { bg: 'var(--success-bg)', text: 'var(--success)' },
+    ongoing:   { bg: 'var(--warning-bg)', text: 'var(--warning-text)' },
+    completed: { bg: 'rgba(88, 166, 255, 0.1)', text: 'var(--primary-text)' },
+    cancelled: { bg: 'var(--danger-bg)', text: 'var(--danger)' },
   };
   const statusStyle = statusColors[event.status] || { bg: '#f0f0f0', text: '#333' };
 

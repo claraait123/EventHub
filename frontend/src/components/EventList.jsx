@@ -116,7 +116,7 @@ function EventList() {
         {error && <p style={{ color: 'red' }}>{error}</p>}
         {!loading && events.length === 0 && <p>No events found.</p>}
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        <div className="events-grid">
           {filteredEvents.map(event => (
             <EventCard
               key={event.id}

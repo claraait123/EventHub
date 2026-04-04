@@ -211,3 +211,37 @@ def delete_user(request, username):
     
     user_to_delete.delete()
     return Response({'status': 'deleted'})
+
+@api_view(['GET'])
+def list_all_users(request):
+    if not request.user.is_staff:
+        return Response({'error': 'Not authorized'}, status=403)
+    
+    users = User.objects.all().order_by('-date_joined')
+    data = []
+    for u in users:
+        profile, _ = UserProfile.objects.get_or_create(user=u)
+        data.append({
+            'id': u.id,
+            'username': u.username,
+            'date_joined': u.date_joined.strftime("%B %d, %Y") if u.date_joined else "N/A",
+            'avatar_url': profile.get_avatar_url(),
+            'is_staff': u.is_staff
+        })
+    return Response(data)
+
+@api_view(['PATCH'])
+def admin_edit_user(request, username):
+    if not request.user.is_staff:
+        return Response({'error': 'Not allowed'}, status=403)
+    
+    user_to_edit = get_object_or_404(User, username=username)
+    new_username = request.data.get('username')
+    
+    if new_username and new_username != user_to_edit.username:
+        if User.objects.filter(username=new_username).exists():
+            return Response({'error': 'Username already taken.'}, status=400)
+        user_to_edit.username = new_username
+        user_to_edit.save()
+        
+    return Response({'status': 'updated', 'username': user_to_edit.username})

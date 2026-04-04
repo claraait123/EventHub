@@ -17,7 +17,7 @@ function Navbar() {
         👥 Participants
       </Link>
       <button onClick={handleLogout} className="navbar-logout-btn">
-        Se déconnecter
+        Log out
       </button>
     </nav>
   );

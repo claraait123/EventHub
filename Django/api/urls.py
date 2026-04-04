@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import (EventViewSet, ParticipantViewSet, RegistrationViewSet, register_user, get_user_profile, get_current_user, join_event, leave_event, my_events, remove_member, user_settings, change_password, delete_account, delete_user)
+from .views import (EventViewSet, ParticipantViewSet, RegistrationViewSet, register_user, get_user_profile, get_current_user, join_event, leave_event, my_events, remove_member, user_settings, change_password, delete_account, delete_user, list_all_users, admin_edit_user)
 from rest_framework.authtoken.views import obtain_auth_token
 
 router = DefaultRouter()
@@ -22,4 +22,6 @@ urlpatterns = [
     path('settings/change-password/', change_password, name='change_password'),
     path('settings/delete-account/', delete_account, name='delete_account'),
     path('profiles/<str:username>/delete/', delete_user, name='delete_user'),
+    path('admin/users/', list_all_users, name='list_all_users'),
+    path('admin/users/<str:username>/edit/', admin_edit_user, name='admin_edit_user'),
 ]

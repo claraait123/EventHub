@@ -37,7 +37,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         event = data.get('event')
         participant = data.get('participant')
         if Registration.objects.filter(event=event, participant=participant).exists():
-            raise serializers.ValidationError("Ce participant est déjà inscrit à cet événement.")
+            raise serializers.ValidationError("This participant is already registered for this event.")
         return data
 
 class EventSerializer(serializers.ModelSerializer):

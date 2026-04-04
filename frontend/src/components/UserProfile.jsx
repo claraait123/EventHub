@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar'; 
 import EventCard from './EventCard';
-import './UserProfile.css'; // Import du CSS
 
 function UserProfile() {
   const { username } = useParams();

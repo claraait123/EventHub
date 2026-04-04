@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar';
-import './Settings.css';
 
 function Settings() {
   const navigate = useNavigate();

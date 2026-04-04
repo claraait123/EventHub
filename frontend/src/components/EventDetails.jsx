@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar';
-import './EventDetails.css'; 
 
 function EventDetails() {
   const { id } = useParams();

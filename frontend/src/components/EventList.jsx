@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar';
 import EventCard from './EventCard';
-import './EventList.css';
 
 function EventList() {
   const [events, setEvents] = useState([]);

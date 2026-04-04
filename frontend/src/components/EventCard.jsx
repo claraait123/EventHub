@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
-import './EventCard.css';
 
 function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDelete }) {
   const navigate = useNavigate();

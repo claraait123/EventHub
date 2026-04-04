@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar';
-import './MyEvents.css';
 
 function MyEvents() {
   const [events, setEvents] = useState([]);

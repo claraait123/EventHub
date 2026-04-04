@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../api';
 import Navbar from './Navbar';
-import './ParticipantDashboard.css';
 
 function ParticipantDashboard() {
   const [participants, setParticipants] = useState([]);

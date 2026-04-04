@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar';
-import './EditEvent.css'; // N'oublie pas l'import !
 
 function EditEvent() {
   const { id } = useParams();

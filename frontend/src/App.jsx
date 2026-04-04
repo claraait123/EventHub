@@ -11,7 +11,6 @@ import MyEvents from './components/MyEvents';
 import Settings from './components/Settings';
 import Footer from './components/Footer';
 
-// Composant de protection des routes
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
   return token ? children : <Navigate to="/login" />;
@@ -36,7 +35,7 @@ function App() {
             <Route path="*" element={<Navigate to="/events" />} />
           </Routes>
         </div>
-        <Footer />  {/* ← AJOUT */}
+        <Footer />
       </div>
     </Router>
   );

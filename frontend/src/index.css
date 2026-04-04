@@ -3,31 +3,38 @@
 /* ========================================= */
 
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* THÈME CLAIR (Par défaut) */
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafbfc;
+  --bg-tertiary: #f6f8fa;
+  --bg-input: #ffffff;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --text-primary: #24292e;
+  --text-secondary: #586069;
+  --text-muted: #959da5;
+  --text-title: #bdbdbd;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --border-main: #e1e4e8;
+  --border-input: #cccccc;
+
+  --primary: #007bff;
+  --primary-hover: #0056b3;
+  --primary-text: #0366d6;
+
+  --danger: #dc3545;
+  --danger-hover: #c82333;
+  --danger-bg: #ffeef0;
+
+  --success: #28a745;
+  --success-hover: #218838;
+  --success-bg: #e6ffed;
+
+  --warning-text: #b08800;
+  --warning-bg: #fffdef;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 2px 10px rgba(0, 0, 0, 0.05);
 
   @media (max-width: 1024px) {
     font-size: 16px;
@@ -54,16 +61,51 @@
   }
 }
 
+[data-theme="dark"] {
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #010409;
+  --bg-input: #0d1117;
+
+  --text-primary: #c9d1d9;
+  --text-secondary: #8b949e;
+  --text-muted: #484f58;
+  --text-title: #f0f6fc;
+
+  --border-main: #30363d;
+  --border-input: #30363d;
+
+  --primary: #58a6ff;
+  --primary-hover: #3182ce;
+  --primary-text: #58a6ff;
+
+  --danger: #f85149;
+  --danger-hover: #da3633;
+  --danger-bg: rgba(248, 81, 73, 0.1);
+
+  --success: #2ea043;
+  --success-hover: #238636;
+  --success-bg: rgba(46, 160, 67, 0.15);
+
+  --warning-text: #d29922;
+  --warning-bg: rgba(210, 153, 34, 0.15);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
 body {
   margin: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
+  max-width: 1126px;
   margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -71,10 +113,7 @@ body {
 }
 
 @media (max-width: 1150px) {
-  #root {
-    border-inline: none;
-    padding: 0 15px;
-  }
+  #root { padding: 0 15px; }
 }
 
 h1,
@@ -1098,7 +1137,6 @@ h4 {
 /* ========================================= */
 /* ParticipantDashboard.css */
 /* ========================================= */
-
 .dashboard-container {
   max-width: 900px;
   margin: 40px auto;
@@ -1213,22 +1251,6 @@ h4 {
 .btn-delete:disabled {
   background-color: #f5c6cb;
   cursor: not-allowed;
-}
-
-/* Support pour le Dark Mode si vous l'avez implémenté */
-[data-theme="dark"] .user-card {
-  background-color: #161b22;
-  border-color: #30363d;
-}
-[data-theme="dark"] .user-name { color: #58a6ff; }
-[data-theme="dark"] .user-date { color: #8b949e; }
-
-@media (max-width: 768px) {
-  .dashboard-container { padding: 10px; }
-  .dashboard-table th, .dashboard-table td {
-    padding: 8px 10px;
-    font-size: 14px;
-  }
 }
 
 

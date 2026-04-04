@@ -1,42 +1,42 @@
+import './Footer.css';
+
 function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer style={{
-      marginTop: '60px',
-      padding: '40px 20px 24px',
-      backgroundColor: '#f6f8fa',
-      borderTop: '1px solid #e1e4e8',
-      textAlign: 'center',
-    }}>
-
-      <p style={{ margin: '0 0 16px 0', fontWeight: 'bold', fontSize: '18px', color: '#24292e' }}>
-        <img src="/logo.ico" alt="EventHub Logo" style={{ height: '30px', marginRight: '10px' }} /> EventHub
+    <footer className="footer-container">
+      <p className="footer-brand">
+        <img src="/logo.ico" alt="EventHub Logo" className="footer-logo" /> EventHub
       </p>
 
-      <p style={{ margin: '0 0 8px 0', fontSize: '13px', color: '#586069', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-        Équipe
+      <p className="footer-team-title">
+        TEAM
       </p>
 
-      <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '24px', marginBottom: '24px' }}>
-        <div style={{ fontSize: '14px', color: '#24292e' }}>
-          <span style={{ fontWeight: '500' }}>Maria Aydin</span><br />
-          <a href="maria.aydin@etu.u-paris.fr" style={{ color: '#0366d6', textDecoration: 'none', fontSize: '13px' }}>maria.aydin@etu.u-paris.fr</a>
+      <div className="footer-team-container">
+        <div className="footer-team-member">
+          <span className="footer-team-name">Maria Aydin</span><br />
+          <a href="mailto:maria.aydin@etu.u-paris.fr" className="footer-team-email">
+            maria.aydin@etu.u-paris.fr
+          </a>
         </div>
-        <div style={{ fontSize: '14px', color: '#24292e' }}>
-          <span style={{ fontWeight: '500' }}>Clara Ait Mokhtar</span><br />
-          <a href="clara.ait-mokhtar@etu.u-paris.fr" style={{ color: '#0366d6', textDecoration: 'none', fontSize: '13px' }}>clara.ait-mokhtar@etu.u-paris.fr</a>
+        <div className="footer-team-member">
+          <span className="footer-team-name">Clara Ait Mokhtar</span><br />
+          <a href="mailto:clara.ait-mokhtar@etu.u-paris.fr" className="footer-team-email">
+            clara.ait-mokhtar@etu.u-paris.fr
+          </a>
         </div>
-        <div style={{ fontSize: '14px', color: '#24292e' }}>
-          <span style={{ fontWeight: '500' }}>Vincent Tan</span><br />
-          <a href="vincent.tan@etu.u-paris.fr" style={{ color: '#0366d6', textDecoration: 'none', fontSize: '13px' }}>vincent.tan@etu.u-paris.fr</a>
+        <div className="footer-team-member">
+          <span className="footer-team-name">Vincent Tan</span><br />
+          <a href="mailto:vincent.tan@etu.u-paris.fr" className="footer-team-email">
+            vincent.tan@etu.u-paris.fr
+          </a>
         </div>
       </div>
 
-      <p style={{ margin: 0, fontSize: '12px', color: '#959da5' }}>
+      <p className="footer-copyright">
         © {year} EventHub — Projet universitaire M1
       </p>
-
     </footer>
   );
 }

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar';
 import EventCard from './EventCard';
+import './EventList.css';
 
 function EventList() {
   const [events, setEvents] = useState([]);
@@ -75,21 +76,21 @@ function EventList() {
     <div>
       <Navbar />
       <div style={{ padding: '20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h2 style={{ margin: 0 }}>Events</h2>
-          <Link to="/add-event" style={{ padding: '8px 16px', backgroundColor: '#28a745', color: 'white', borderRadius: '4px', textDecoration: 'none', fontSize: '14px' }}>
+        <div className="event-list-container">
+           <h2 className="event-list-title">All Events</h2>
+          <Link to="/add-event" id="AddEventButton">
             + New Event
           </Link>
         </div>
 
         {/* Barre de recherche + filtre statut sur la même ligne */}
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+        <div className="search">
           <input
             type="text"
             placeholder="Search by title..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ flex: 1, padding: '8px 12px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '14px' }}
+            className="search-input"
           />
           <select
             onChange={(e) => setStatusFilter(e.target.value)}

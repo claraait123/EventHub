@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api';
+import './Register.css'; 
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -24,36 +25,39 @@ function Register() {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto', marginTop: '50px', padding: '20px', border: '1px solid #ccc', borderRadius: '5px' }}>
-      <h2>Créer un compte (Sign Up)</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="register-container">
+      <h2 className="register-title">Sign Up</h2>
       
-      <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+      {error && <p className="register-error">{error}</p>}
+      
+      <form onSubmit={handleRegister} className="register-form">
         <input 
           type="text" 
-          placeholder="Nom d'utilisateur" 
+          placeholder="Username" 
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
+          className="register-input"
         />
         <input 
           type="password" 
-          placeholder="Mot de passe" 
+          placeholder="Password" 
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          className="register-input"
         />
         <button
           type="submit"
           disabled={isLoading}
-          style={{ padding: '10px', backgroundColor: isLoading ? '#6c757d' : '#28a745', color: 'white', border: 'none', borderRadius: '3px', cursor: isLoading ? 'not-allowed' : 'pointer' }}
+          className="register-button"
         >
           {isLoading ? 'Loading...' : 'Sign Up'}
         </button>
       </form>
 
-      <p style={{ marginTop: '20px', textAlign: 'center' }}>
-        Déjà un compte ? <Link to="/login">Se connecter (Sign In)</Link>
+      <p className="register-footer-text">
+        Déjà un compte ? <Link to="/login" className="register-link">Sign In</Link>
       </p>
     </div>
   );

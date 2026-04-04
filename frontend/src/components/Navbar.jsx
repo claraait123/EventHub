@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import './Navbar.css';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -9,10 +10,16 @@ function Navbar() {
   };
 
   return (
-    <nav style={{ padding: '15px', backgroundColor: '#f0f0f0', marginBottom: '20px', display: 'flex', gap: '20px' }}>
-      <Link to="/events" style={{ textDecoration: 'none', color: '#333', fontWeight: 'bold' }}>📅 Événements</Link>
-      <Link to="/participants" style={{ textDecoration: 'none', color: '#333', fontWeight: 'bold' }}>👥 Participants</Link>
-      <button onClick={handleLogout} style={{ marginLeft: 'auto', cursor: 'pointer' }}>Se déconnecter</button>
+    <nav className="navbar-container">
+      <Link to="/events" className="navbar-link">
+        📅 Événements
+      </Link>
+      <Link to="/participants" className="navbar-link">
+        👥 Participants
+      </Link>
+      <button onClick={handleLogout} className="navbar-logout-btn">
+        Se déconnecter
+      </button>
     </nav>
   );
 }

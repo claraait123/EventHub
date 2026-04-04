@@ -1,0 +1,65 @@
+/* Conteneur principal */
+.dashboard-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Titre et statistiques */
+.dashboard-title {
+  margin-top: 0;
+  color: #808891;
+  font-size: 24px;
+}
+
+.dashboard-stats {
+  color: #586069;
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+/* Conteneur du tableau (pour arrondir les bords) */
+.dashboard-table-wrapper {
+  background-color: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  overflow: hidden; /* Permet d'appliquer le border-radius au tableau */
+}
+
+/* Le tableau en lui-même */
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+/* En-tête du tableau */
+.dashboard-table th {
+  background-color: #f6f8fa;
+  color: #24292e;
+  font-weight: 600;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+/* Cellules du tableau */
+.dashboard-table td {
+  padding: 12px 16px;
+  color: #24292e;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+/* Enlever la bordure de la dernière ligne */
+.dashboard-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Effet au survol des lignes */
+.dashboard-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.dashboard-table tbody tr:hover {
+  background-color: #f0f4ff; /* Léger bleu au survol */
+}

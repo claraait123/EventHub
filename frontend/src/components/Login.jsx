@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api';
+import './Login.css';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -17,43 +18,46 @@ function Login() {
       localStorage.setItem('token', response.data.token);
       navigate('/events');
     } catch (err) {
-      setError('Incorrect credentials.');
+      setError('Incorrect username or password.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto', marginTop: '50px', padding: '20px', border: '1px solid #ccc', borderRadius: '5px' }}>
-      <h2>Connexion (Sign In)</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="login-container">
+      <h2 className="login-title">Sign In</h2>
       
-      <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+      {error && <p className="login-error">{error}</p>}
+      
+      <form onSubmit={handleLogin} className="login-form">
         <input 
           type="text" 
-          placeholder="Nom d'utilisateur" 
+          placeholder="Username" 
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
+          className="login-input"
         />
         <input 
           type="password" 
-          placeholder="Mot de passe" 
+          placeholder="Password" 
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          className="login-input"
         />
         <button
           type="submit"
           disabled={isLoading}
-          style={{ padding: '10px', backgroundColor: isLoading ? '#6c757d' : '#007bff', color: 'white', border: 'none', borderRadius: '3px', cursor: isLoading ? 'not-allowed' : 'pointer' }}
+          className="login-button"
         >
           {isLoading ? 'Loading...' : 'Sign In'}
         </button>
       </form>
 
-      <p style={{ marginTop: '20px', textAlign: 'center' }}>
-        Pas encore de compte ? <Link to="/register">S'inscrire (Sign Up)</Link>
+      <p className="login-footer-text">
+        Don't have an account yet? <Link to="/register" className="login-link">Sign up</Link>
       </p>
     </div>
   );

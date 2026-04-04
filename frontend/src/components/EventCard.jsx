@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
+import './EventCard.css';
 
 function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDelete }) {
   const navigate = useNavigate();
@@ -53,30 +54,24 @@ function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDe
   return (
     <div
       onClick={() => navigate(`/events/${event.id}`)}
-      style={{
-        border: '1px solid #e1e4e8', borderRadius: '8px', padding: '16px',
-        backgroundColor: '#fafbfc', boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-        cursor: 'pointer', transition: 'box-shadow 0.2s, background-color 0.2s'
-      }}
-      onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f0f4ff'}
-      onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fafbfc'}
+      className="event-custom-card"
     >
       {/* Ligne 1 : titre + boutons */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
-        <h4 style={{ margin: 0, color: '#0366d6', fontSize: '1rem' }}>{event.title}</h4>
+      <div className='card-title'>
+        <h4>{event.title}</h4>
 
-        <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }} onClick={e => e.stopPropagation()}>
+        <div className="card-button-group" onClick={e => e.stopPropagation()}>
           {canEdit && (
             <>
               <button
                 onClick={(e) => { e.stopPropagation(); navigate(`/events/${event.id}/edit`); }}
-                style={{ padding: '4px 12px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                className="card-button edit-button"
               >
                 ✏️ Edit
               </button>
               <button
                 onClick={handleDelete}
-                style={{ padding: '4px 12px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                className="card-button delete-button"
               >
                 🗑️ Delete
               </button>
@@ -87,14 +82,14 @@ function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDe
             isJoined ? (
               <button
                 onClick={handleLeave}
-                style={{ padding: '4px 12px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                className="card-button leave-button"
               >
                 ✖ Leave
               </button>
             ) : (
               <button
                 onClick={handleJoin}
-                style={{ padding: '4px 12px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                className="card-button join-button"
               >
                 ✚ Join
               </button>
@@ -104,27 +99,24 @@ function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDe
       </div>
 
       {/* Ligne 2 : auteur + date + statut */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px', flexWrap: 'wrap' }}>
+      <div className="card-infos">
         <img
           src={event.creator_avatar}
           alt={event.creator_username}
-          style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover' }}
+          className = "card-pfp"
         />
         <span
           onClick={(e) => { e.stopPropagation(); navigate(`/${event.creator_username}`); }}
-          style={{ fontSize: '13px', color: '#0366d6', cursor: 'pointer', fontWeight: '500' }}
+          className = "card-creator"
           onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
           onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
         >
           {event.creator_username}
         </span>
-        <span style={{ color: '#ccc' }}>·</span>
-        <span style={{ fontSize: '13px', color: '#586069' }}>{event.date}</span>
-        <span style={{ color: '#ccc' }}>·</span>
-        <span style={{
-          fontSize: '12px', fontWeight: '600', padding: '2px 8px', borderRadius: '12px',
-          backgroundColor: statusStyle.bg, color: statusStyle.text
-        }}>
+        <span className="card-info-separator">·</span>
+        <span className='card-date'>{event.date}</span>
+        <span className="card-info-separator">·</span>
+        <span className="card-status" style={{backgroundColor: statusStyle.bg, color: statusStyle.text}}>
           {event.status}
         </span>
       </div>

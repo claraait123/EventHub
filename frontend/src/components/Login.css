@@ -1,0 +1,93 @@
+/* Conteneur principal */
+.login-container {
+  max-width: 400px;
+  margin: 50px auto auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Titre */
+.login-title {
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #24292e;
+}
+
+/* Message d'erreur */
+.login-error {
+  color: #dc3545;
+  background-color: #ffeef0;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Formulaire */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Champs de texte (inputs) */
+.login-input {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Bouton de soumission */
+.login-button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.login-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+/* État "Chargement" du bouton (désactivé) */
+.login-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* Texte et lien en bas */
+.login-footer-text {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #586069;
+}
+
+.login-link {
+  color: #0366d6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}

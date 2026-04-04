@@ -1,0 +1,100 @@
+.event-custom-card {
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #fafbfc;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.card-title{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+h4 {
+  margin: 0;
+  color:#0366d6;
+  font-size: 1rem;
+}
+
+.event-custom-card:hover {
+  background-color: #f0f4ff;
+}
+
+.card-button-group{
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.card-button {
+  padding: 4px 12px;
+  color: white;
+  border-radius: 4px;
+  border:none;
+  text-decoration: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.edit-button {
+  background-color: #007bff;
+}
+
+.delete-button {
+  background-color: #dc3545;
+}
+
+.leave-button {
+  background-color: #6c757d;
+}
+
+.join-button {
+  background-color: #28a745;
+}
+
+.card-infos{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.card-pfp {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.card-creator {
+    font-size: 13px;
+    color: #0366d6;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.card-info-separator{
+    color : #ccc;
+}
+
+.card-date{
+    font-size: 13px;
+    color: #586069;
+}
+
+.card-status {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+}

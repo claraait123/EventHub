@@ -1,0 +1,87 @@
+/* Container principal du formulaire */
+.edit-event-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.edit-event-title {
+  margin-top: 0;
+  color:#0366d6;
+}
+
+/* Message d'erreur */
+.edit-event-error {
+  color: #dc3545;
+  background-color: #ffeef0;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+/* Formulaire et champs */
+.edit-event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.edit-event-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.edit-event-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-family: inherit; /* Pour que le textarea garde la même police */
+  font-size: 14px;
+}
+
+.edit-event-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Boutons */
+.edit-event-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.edit-event-btn {
+  flex: 1;
+  padding: 12px;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.edit-event-btn-submit {
+  background-color: #007bff;
+  font-weight: bold;
+}
+
+.edit-event-btn-submit:hover {
+  background-color: #0056b3;
+}
+
+.edit-event-btn-cancel {
+  background-color: #6c757d;
+}
+
+.edit-event-btn-cancel:hover {
+  background-color: #5a6268;
+}

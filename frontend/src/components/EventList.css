@@ -1,0 +1,44 @@
+.event-list-container {
+  display: flex;
+  flex-direction: row; 
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.event-list-title {
+  font-size: 24px;
+  color: #bdbdbd;
+  margin: 0; 
+}
+
+#AddEventButton {
+  padding: 8px 16px;
+  background-color: #28a745;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.search {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.search input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #e1e4e8;
+}
+
+.status-filter {
+  padding: 8px;
+  cursor: 'pointer' ;
+  border: 1px solid #e1e4e8;
+}

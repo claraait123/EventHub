@@ -1,4 +1,6 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import ThemeToggle from './components/ThemeToggle';
 import Login from './components/Login';
 import EventList from './components/EventList';
 import EventDetails from './components/EventDetails';
@@ -35,7 +37,11 @@ function App() {
             <Route path="*" element={<Navigate to="/events" />} />
           </Routes>
         </div>
+        
         <Footer />
+        
+        <ThemeToggle />
+        
       </div>
     </Router>
   );

@@ -26,7 +26,7 @@ function Settings() {
         setAvatarSeed(res.data.avatar_seed);
         setAvatarUrl(res.data.avatar_url);
 
-        // Si l'avatar stocké est une image uploadée (base64)
+        // If the stored avatar is an uploaded image (base64)
         if (res.data.avatar_url && res.data.avatar_url.startsWith('data:image/')) {
           setAvatarMode('upload');
           setImagePreview(res.data.avatar_url);
@@ -114,7 +114,7 @@ function Settings() {
     reader.readAsDataURL(file);
   };
 
-  // Helper pour savoir si un message est un succès ou une erreur
+  // Helper to determine whether a message is success or error
   const isSuccess = (msg) => msg.toLowerCase().includes('success');
 
   if (loading) return <div><Navbar /><p style={{ padding: '20px' }}>Loading...</p></div>;
@@ -125,7 +125,7 @@ function Settings() {
       <div className="settings-container">
         <h2 className="settings-title">Account Settings</h2>
 
-        {/* SECTION : Profil */}
+        {/* SECTION: Profile */}
         <div className="settings-section">
           <h3 className="settings-section-title">Profile</h3>
           
@@ -210,7 +210,7 @@ function Settings() {
           </form>
         </div>
 
-        {/* SECTION : Mot de passe */}
+        {/* SECTION: Password */}
         <div className="settings-section">
           <h3 className="settings-section-title">Change Password</h3>
           <form onSubmit={handlePasswordChange} className="settings-form">

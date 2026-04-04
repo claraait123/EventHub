@@ -7,7 +7,7 @@ function AddEvent() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
-  const [status, setStatus] = useState('planned'); // Statut par défaut
+  const [status, setStatus] = useState('planned'); // Default status
   const [error, setError] = useState('');
   
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ function AddEvent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Envoi des données à l'API Django
+      // Send data to the Django API
       await api.post('/events/', {
         title,
         description,
@@ -23,7 +23,7 @@ function AddEvent() {
         status
       });
       
-      // Si le succès, on redirige l'utilisateur vers la liste des événements
+      // On success, redirect the user to the event list
       navigate('/events');
     } catch (err) {
       console.error(err);

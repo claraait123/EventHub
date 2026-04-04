@@ -62,7 +62,7 @@ function UserProfile() {
       <Navbar /> 
       <div className="user-profile-container">
         
-        {/* En-tête du profil */}
+        {/* Profile header */}
         <div className="user-profile-header">
           <img
             src={profile.profile_picture}
@@ -72,7 +72,7 @@ function UserProfile() {
           <div className="user-profile-info">
             <h2 className="user-profile-name">{profile.username}'s Profile</h2>
 
-            {/* Bouton visible uniquement pour les admins, et pas sur son propre profil */}
+            {/* Button visible only for admins and not on their own profile */}
             {currentUser?.is_staff && currentUser?.username !== profile.username && (
               <button
                 onClick={handleDeleteProfile}
@@ -84,7 +84,7 @@ function UserProfile() {
           </div>
         </div>
 
-        {/* Barre de titre avec le filtre */}
+        {/* Title bar with filter */}
         <div className="user-profile-filter-bar">
           <h3 className="user-profile-filter-title">Events created ({filteredEvents.length})</h3>
           
@@ -101,7 +101,7 @@ function UserProfile() {
           </select>
         </div>
 
-        {/* Liste des événements */}
+        {/* Event list */}
         <div className="user-profile-events">
           {filteredEvents.map(event => (
             <EventCard

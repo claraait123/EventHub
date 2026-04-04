@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 
 const ThemeToggle = () => {
-  // 1. On initialise l'état en lisant le localStorage
+  // 1. Initialize state by reading localStorage
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('app-theme');
-    // Si on a sauvegardé "dark", on retourne true, sinon false
+    // If "dark" was saved, return true; otherwise false
     if (savedTheme) {
       return savedTheme === 'dark';
     }
-    // Optionnel: Vérifier les préférences système de l'utilisateur
+    // Optional: Check the user's system color scheme preference
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       return true;
     }
     return false;
   });
 
-  // 2. À chaque changement de 'isDarkMode', on met à jour le DOM ET le localStorage
+  // 2. When 'isDarkMode' changes, update the DOM and localStorage
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.setAttribute('data-theme', 'dark');

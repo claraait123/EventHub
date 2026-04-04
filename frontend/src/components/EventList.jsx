@@ -19,7 +19,7 @@ function EventList() {
       try {
         setLoading(true);
         const url = statusFilter ? `/events/?status=${statusFilter}` : '/events/';
-        // On charge les événements ET l'utilisateur courant en parallèle
+        // Load events AND current user in parallel
         const [eventsRes, userRes, myEventsRes] = await Promise.all([
           api.get(url),
           api.get('/me/'),
@@ -82,7 +82,7 @@ function EventList() {
           </Link>
         </div>
 
-        {/* Barre de recherche + filtre statut sur la même ligne */}
+        {/* Search bar + status filter on the same line */}
         <div className="search">
           <input
             type="text"

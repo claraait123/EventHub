@@ -47,7 +47,7 @@ class RegistrationViewSet(viewsets.ModelViewSet):
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])  # Permet à n'importe qui de créer un compte (pas besoin d'être déjà connecté)
+@permission_classes([AllowAny])  # Allow anyone to create an account (no need to be logged in)
 def register_user(request):
     username = request.data.get('username')
     password = request.data.get('password')
@@ -58,10 +58,10 @@ def register_user(request):
     if User.objects.filter(username=username).exists():
         return Response({'error': 'Ce nom d\'utilisateur est déjà pris.'}, status=400)
         
-    # Création de l'utilisateur
+    # Create the user
     user = User.objects.create_user(username=username, password=password)
     
-    # Création du token d'authentification pour cet utilisateur
+    # Create the authentication token for this user
     token, created = Token.objects.get_or_create(user=user)
     
     return Response({'token': token.key})
@@ -116,7 +116,7 @@ def my_events(request):
 def remove_member(request, event_id, user_id):
     event = get_object_or_404(Event, id=event_id)
     
-    # Seuls le créateur et les admins peuvent retirer un participant
+    # Only the creator and admins can remove a participant
     if event.creator != request.user and not request.user.is_staff:
         return Response({'error': 'Not allowed.'}, status=403)
     
@@ -149,11 +149,11 @@ def user_settings(request):
 
         if new_seed is not None:
             profile.avatar_seed = new_seed
-            # Si on remet un seed, on efface l'image uploadée
+            # If a seed is provided again, clear the uploaded image
             profile.avatar_image = ''
 
         if new_image:
-            # Vérifie que c'est bien une image base64 (commence par data:image/)
+            # Check that it's really a base64 image (starts with data:image/)
             if not new_image.startswith('data:image/'):
                 return Response({'error': 'Invalid image format.'}, status=400)
             profile.avatar_image = new_image

@@ -3,7 +3,7 @@
 /* ========================================= */
 
 :root {
-  /* THÈME CLAIR (Par défaut) */
+  /* LIGHT THEME (default) */
   --bg-primary: #ffffff;
   --bg-secondary: #fafbfc;
   --bg-tertiary: #f6f8fa;
@@ -574,7 +574,7 @@ h4 {
   .card-button { flex: 1; text-align: center; }
 }
 
-/* Override spécifique Dark Mode pour le Hover */
+/* Dark Mode-specific hover override */
 [data-theme="dark"] .event-custom-card:hover {
   background-color: var(--bg-tertiary);
   border-color: var(--primary-text);
@@ -1674,7 +1674,7 @@ h4 {
 
 
 /* ========================================= */
-/* Grille de cartes (EventsGrid) */
+/* Card grid (EventsGrid) */
 /* ========================================= */
 
 .events-grid {
@@ -1683,7 +1683,7 @@ h4 {
   gap: 20px;
 }
 
-/* Passage à 1 colonne sur tablette et mobile */
+/* Switch to one column on tablet and mobile */
 @media (max-width: 768px) {
   .events-grid {
     grid-template-columns: 1fr;

@@ -9,14 +9,14 @@ function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Charger les infos de l'utilisateur
+  // Load user info
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem('token');
-        if (!token) return; // Pas connecté
+        if (!token) return; // Not logged in
 
-        // On récupère les infos globales (pour is_staff) et le profil (pour l'avatar)
+        // Fetch global info (for is_staff) and profile info (for avatar)
         const [meRes, settingsRes] = await Promise.all([
           api.get('/me/'),
           api.get('/settings/')
@@ -31,7 +31,7 @@ function Navbar() {
     fetchUser();
   }, []);
 
-  // Fermer le menu si on clique en dehors
+  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -47,7 +47,7 @@ function Navbar() {
     navigate('/login');
   };
 
-  // Si pas connecté, on affiche une navbar minimaliste (utile pour /login ou /register)
+  // If not logged in, show a minimal navbar (useful for /login or /register)
   if (!user || !profileData) {
     return (
       <nav className="navbar-container">
@@ -63,7 +63,7 @@ function Navbar() {
 
   return (
     <nav className="navbar-container">
-      {/* GAUCHE : Logo + Manage Users (si admin) */}
+      {/* LEFT: Logo + Manage Users (if admin) */}
       <div className="navbar-left">
         <Link to="/events" className="navbar-brand">
           <img src="../../public/logo.ico" alt="EventHub Logo" onError={(e) => e.target.style.display='none'} />
@@ -77,7 +77,7 @@ function Navbar() {
         )}
       </div>
 
-      {/* DROITE : Pseudo + Avatar / Dropdown */}
+      {/* RIGHT: Username + Avatar / Dropdown */}
       <div className="navbar-right">
         <Link to={`/${user.username}`} className="navbar-user">
           {user.username}

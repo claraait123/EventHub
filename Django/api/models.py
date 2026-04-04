@@ -40,12 +40,12 @@ class Registration(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     avatar_seed = models.CharField(max_length=100, blank=True)
-    avatar_image = models.TextField(blank=True)  # stocke la base64 de l'image
+    avatar_image = models.TextField(blank=True)  # stores the image base64
 
     def get_avatar_url(self):
-        # Si une vraie image a été uploadée, on la retourne directement
+        # If a real image was uploaded, return it directly
         if self.avatar_image:
             return self.avatar_image
-        # Sinon on utilise DiceBear avec le seed (ou le pseudo par défaut)
+        # Otherwise use DiceBear with the seed (or the default username)
         seed = self.avatar_seed if self.avatar_seed else self.user.username
         return f"https://api.dicebear.com/7.x/identicon/svg?seed={seed}"

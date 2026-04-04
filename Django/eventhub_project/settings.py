@@ -91,7 +91,7 @@ DATABASES = {
     }
 }
 
-# Si on est sur Render (ou autre hébergeur) et qu'une DATABASE_URL existe, on remplace !
+# If running on Render (or another host) and DATABASE_URL exists, replace the default database settings!
 if 'DATABASE_URL' in os.environ:
     DATABASES['default'] = dj_database_url.config(
         default=os.environ.get('DATABASE_URL'),

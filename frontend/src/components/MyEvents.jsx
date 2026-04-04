@@ -65,7 +65,7 @@ function MyEvents() {
                   <span><strong>Date:</strong> {event.date}</span>
                   <span className="my-event-status-wrapper">
                     <strong>Status:</strong>
-                    {/* Génération dynamique de la classe de statut */}
+                    {/* Dynamically generate the status badge class */}
                     <span className={`my-event-badge status-${event.status || 'default'}`}>
                       {event.status}
                     </span>

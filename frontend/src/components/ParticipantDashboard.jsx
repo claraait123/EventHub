@@ -16,7 +16,7 @@ function ParticipantDashboard() {
         const meRes = await api.get('/me/');
         setCurrentUser(meRes.data);
 
-        // Vérification administrateur
+        // Administrator check
         if (meRes.data.is_staff) {
           const usersRes = await api.get('/admin/users/');
           setUsers(usersRes.data);
@@ -50,7 +50,7 @@ function ParticipantDashboard() {
 
     try {
       await api.patch(`/admin/users/${username}/edit/`, { username: newUsername });
-      // Met à jour l'affichage localement
+      // Update the displayed list locally
       setUsers(users.map(u => u.username === username ? { ...u, username: newUsername } : u));
     } catch (err) {
       alert(err.response?.data?.error || 'Could not update username.');
@@ -81,7 +81,7 @@ function ParticipantDashboard() {
           {users.map(user => (
             <div className="user-card" key={user.id}>
               
-              {/* En-tête : Avatar + Pseudo + Date */}
+              {/* Header: Avatar + Username + Date */}
               <div className="user-card-header">
                 <img src={user.avatar_url} alt={user.username} className="user-avatar" />
                 <div className="user-info">
@@ -97,7 +97,7 @@ function ParticipantDashboard() {
                 </div>
               </div>
               
-              {/* Actions : Edit + Delete */}
+              {/* Actions: Edit + Delete */}
               <div className="user-actions">
                 <button 
                   className="btn-action btn-edit" 

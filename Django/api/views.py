@@ -198,3 +198,16 @@ def delete_account(request):
 
     user.delete()
     return Response({'message': 'Account deleted successfully.'})
+
+@api_view(['DELETE'])
+def delete_user(request, username):
+    if not request.user.is_staff:
+        return Response({'error': 'Not allowed.'}, status=403)
+    
+    user_to_delete = get_object_or_404(User, username=username)
+    
+    if user_to_delete == request.user:
+        return Response({'error': 'You cannot delete your own account from here.'}, status=400)
+    
+    user_to_delete.delete()
+    return Response({'status': 'deleted'})

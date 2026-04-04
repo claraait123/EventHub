@@ -55,6 +55,20 @@ function UserProfile() {
     }
   };
 
+  const handleDeleteProfile = async () => {
+    const confirmed = window.confirm(
+      `Are you sure you want to permanently delete ${profile.username}'s account? All their events will also be deleted.`
+    );
+    if (!confirmed) return;
+
+    try {
+      await api.delete(`/profiles/${profile.username}/delete/`);
+      navigate('/events'); // redirige vers la liste après suppression
+    } catch (err) {
+      alert(err.response?.data?.error || 'Could not delete account.');
+    }
+  };
+
   return (
     <div>
       <Navbar /> 
@@ -68,6 +82,29 @@ function UserProfile() {
             style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#f0f0f0' }}
           />
           <h2 style={{ fontSize: '2rem', margin: 0 }}>{profile.username}'s Profile</h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '30px', paddingBottom: '20px', borderBottom: '2px solid #eee' }}>
+            <img
+              src={profile.profile_picture}
+              alt={`${profile.username}'s avatar`}
+              style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#f0f0f0', objectFit: 'cover' }}
+            />
+            <div style={{ flex: 1 }}>
+              <h2 style={{ fontSize: '2rem', margin: '0 0 8px 0' }}>{profile.username}'s Profile</h2>
+
+              {/* Bouton visible uniquement pour les admins, et pas sur son propre profil */}
+              {currentUser?.is_staff && currentUser?.username !== profile.username && (
+                <button
+                  onClick={handleDeleteProfile}
+                  style={{
+                    padding: '6px 14px', backgroundColor: '#dc3545', color: 'white',
+                    border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px'
+                  }}
+                >
+                  🗑️ Delete this account
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* 3. NOUVEAU : Barre de titre avec le filtre (Menu déroulant) */}

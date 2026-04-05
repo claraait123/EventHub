@@ -1,6 +1,6 @@
 # EventHub - Full-Stack Event Management System
 
-**Live Application:** [---LINK---](---LINK---)
+**Live Application:** [CLICK HERE](https://event-eer3uqekx-claraait123s-projects.vercel.app/)
 
 This repository contains the final project for the **Web Programming 2026** course (instructed by Dr. Alla Jammine). EventHub is a comprehensive full-stack web application designed for event and participant management. 
 

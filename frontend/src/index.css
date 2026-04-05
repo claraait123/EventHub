@@ -82,7 +82,7 @@
   --primary-text: #58a6ff;
 
   --danger: #f85149;
-  --danger-hover: #da3633;
+  --danger-hover: #ff5555;
   --danger-bg: rgba(248, 81, 73, 0.1);
 
   --success: #2ea043;
@@ -1285,7 +1285,7 @@ h4 {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--color-danger, #dc3545);
+  color: var(--color-danger);
 }
 
 .dropdown-logout:hover {
@@ -1323,6 +1323,10 @@ h4 {
   background-color: #30363d;
 }
 
+[data-theme="dark"] .dropdown-item.dropdown-logout:hover {
+  background-color: rgba(255, 85, 85, 0.1);
+  color: #ff5555;
+}
 
 /* ========================================= */
 /* ParticipantDashboard.css */

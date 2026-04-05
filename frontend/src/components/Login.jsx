@@ -24,40 +24,49 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <h2 className="login-title">Sign In</h2>
-      
-      {error && <p className="login-error">{error}</p>}
-      
-      <form onSubmit={handleLogin} className="login-form">
-        <input 
-          type="text" 
-          placeholder="Username" 
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          className="login-input"
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="login-input"
-        />
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="login-button"
-        >
-          {isLoading ? 'Loading...' : 'Sign In'}
-        </button>
-      </form>
+    <div className="auth-page-wrapper">
+      {/* Header */}
+      <div className="auth-header">
+        <img src="/logoeventhub.png" alt="EventHub Logo" className="auth-logo" />
+        <h1 className="auth-brand-title">EventHub</h1>
+      </div>
 
-      <p className="login-footer-text">
-        Don't have an account yet? <Link to="/register" className="login-link">Sign up</Link>
-      </p>
+      {/* Login Form */}
+      <div className="login-container">
+        <h2 className="login-title">Sign In</h2>
+        
+        {error && <p className="login-error">{error}</p>}
+        
+        <form onSubmit={handleLogin} className="login-form">
+          <input 
+            type="text" 
+            placeholder="Username" 
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className="login-input"
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="login-input"
+          />
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="login-button"
+          >
+            {isLoading ? 'Loading...' : 'Sign In'}
+          </button>
+        </form>
+
+        <p className="login-footer-text">
+          Don't have an account yet? <Link to="/register" className="login-link">Sign up</Link>
+        </p>
+      </div>
     </div>
   );
 }

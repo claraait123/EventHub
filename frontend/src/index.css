@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Edu+SA+Hand:wght@400..700&family=New+Rocker&family=Ultra&display=swap');
+
 /* ========================================= */
 /* index.css */
 /* ========================================= */
@@ -388,9 +390,9 @@ button {
   max-width: 600px;
   margin: 40px auto;
   padding: 20px;
-  border: 1px solid #e1e4e8;
+  border: 1px solid var(--border-main);
   border-radius: 8px;
-  background-color: #fff;
+  background-color: var(--bg-primary);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
@@ -598,11 +600,14 @@ h4 {
   margin-top: 20px;
 }
 
-.event-details-title { margin: 0; }
+.event-details-title { 
+  margin: 0; 
+  color: var(--primary-text);
+}
 
 .event-details-edit-btn {
   padding: 8px 16px;
-  background-color: #007bff;
+  background-color: var(--primary);
   color: white;
   border: none;
   border-radius: 4px;
@@ -611,7 +616,7 @@ h4 {
   transition: background-color 0.2s;
 }
 
-.event-details-edit-btn:hover { background-color: #0056b3; }
+.event-details-edit-btn:hover { background-color: var(--primary-hover); }
 
 .event-details-creator-info {
   margin: 8px 0 16px 0;
@@ -642,8 +647,8 @@ h4 {
   gap: 10px;
   padding: 8px 12px;
   border-radius: 6px;
-  border: 1px solid #e1e4e8;
-  background-color: #fafbfc;
+  border: 1px solid var(--border-main);
+  background-color: var(--bg-primary);
 }
 
 .event-details-avatar {
@@ -775,11 +780,11 @@ h4 {
 }
 
 .footer-brand {
+  font-family: "Ultra", serif;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 0 16px 0;
-  font-weight: bold;
   font-size: 18px;
   color: var(--text-primary);
 }
@@ -837,26 +842,61 @@ h4 {
   }
 }
 
+/* ========================================= */
+/* Auth Wrappers (Login & Register header)*/
+/* ========================================= */
+
+.auth-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5vh;
+  width: 100%;
+}
+
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.auth-logo {
+  width: 70px;
+  height: auto;
+  margin-bottom: 12px;
+}
+
+.auth-brand-title {
+  font-size: 2.2rem;
+  font-family: "Ultra", serif;
+  margin: 0;
+  color: var(--text-primary);
+  font-weight: 500;
+  letter-spacing: 1px;
+}
 
 /* ========================================= */
 /* Login.css & Register.css */
 /* ========================================= */
 
 .login-container, .register-container {
+  width: 100%;
   max-width: 400px;
-  margin: 50px auto auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin: 0; 
+  padding: 24px;
+  border: 1px solid var(--border-main); 
+  border-radius: 8px;
+  background-color: var(--bg-primary);
+  box-shadow: var(--shadow-md);
 }
 
 .login-title, .register-title {
   margin-top: 0;
   margin-bottom: 20px;
   text-align: center;
-  color: #24292e;
+  color: var(--color-primary);
 }
 
 .login-error, .register-error {
@@ -964,6 +1004,7 @@ h4 {
 .my-events-title {
   margin-top: 0;
   margin-bottom: 24px;
+  color: var(--color-primary);
 }
 
 .my-events-empty {
@@ -997,10 +1038,10 @@ h4 {
 }
 
 .my-event-card {
-  border: 1px solid #e1e4e8;
+  border: 1px solid var(--border-main);
   border-radius: 8px;
   padding: 20px;
-  background-color: #fafbfc;
+  background-color: var(--bg-primary);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
@@ -1019,7 +1060,7 @@ h4 {
 
 .my-event-card-title {
   margin: 0;
-  color: #0366d6;
+  color: var(--color-primary);
   font-size: 1.1rem;
 }
 
@@ -1116,14 +1157,14 @@ h4 {
 }
 
 .navbar-brand {
+  font-family: "Ultra", serif;
   display: flex;
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: var(--color-primary, #0366d6);
-  font-weight: 700;
+  color: var(--primary, #0366d6);
+  font-weight: 300;
   font-size: 1.25rem;
-  letter-spacing: -0.5px;
 }
 
 .navbar-brand img {
@@ -1415,21 +1456,21 @@ h4 {
 
 .settings-title {
   margin-bottom: 24px;
-  color: #bdbdbd;
+  color: var(--color-primary);
 }
 
 .settings-section {
-  border: 1px solid #e1e4e8;
+  border: 1px solid var(--border-main);
   border-radius: 8px;
   padding: 24px;
   margin-bottom: 24px;
-  background-color: #fff;
+  background-color: var(--bg-primary);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .settings-section-title {
   margin-top: 0;
-  color: #24292e;
+  color: var(--color-primary);
 }
 
 .settings-section-danger {
@@ -1460,7 +1501,7 @@ h4 {
   margin-bottom: 6px;
   font-weight: bold;
   font-size: 14px;
-  color: #24292e;
+  color: var(--text-secondary);
 }
 
 .settings-input {
@@ -1497,7 +1538,7 @@ h4 {
 .settings-avatar-options-title {
   margin: 0 0 8px 0;
   font-size: 13px;
-  color: #555;
+  color: var(--color-primary);
 }
 
 .settings-avatar-toggles {
@@ -1672,6 +1713,86 @@ h4 {
   }
 }
 
+/* ========================================= */
+/* AddEvent.css */
+/* ========================================= */
+
+.add-event-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid var(--border-main);
+  border-radius: 8px;
+  background-color: var(--bg-primary);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+
+.add-event-title {
+  margin-top: 0;
+  color: #0366d6; 
+}
+
+.add-event-error {
+  color: #dc3545;
+  background-color: #ffeef0;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.add-event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.add-event-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.add-event-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+
+.add-event-input:focus {
+  outline: none;
+  border-color: #28a745;
+  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+}
+
+.add-event-btn-submit {
+  padding: 12px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: background-color 0.2s;
+}
+
+.add-event-btn-submit:hover {
+  background-color: #218838;
+}
+
+
+@media (max-width: 480px) {
+  .add-event-container {
+    margin: 20px;
+    padding: 15px;
+  }
+}
 
 /* ========================================= */
 /* Card grid (EventsGrid) */

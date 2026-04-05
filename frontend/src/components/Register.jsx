@@ -24,40 +24,49 @@ function Register() {
   };
 
   return (
-    <div className="register-container">
-      <h2 className="register-title">Sign Up</h2>
-      
-      {error && <p className="register-error">{error}</p>}
-      
-      <form onSubmit={handleRegister} className="register-form">
-        <input 
-          type="text" 
-          placeholder="Username" 
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          className="register-input"
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="register-input"
-        />
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="register-button"
-        >
-          {isLoading ? 'Loading...' : 'Sign Up'}
-        </button>
-      </form>
+    <div className="auth-page-wrapper">
+      {/* Header */}
+      <div className="auth-header">
+        <img src="/logoeventhub.png" alt="EventHub Logo" className="auth-logo" />
+        <h1 className="auth-brand-title">EventHub</h1>
+      </div>
 
-      <p className="register-footer-text">
-        Déjà un compte ? <Link to="/login" className="register-link">Sign In</Link>
-      </p>
+      {/* Registration Form */}
+      <div className="register-container">
+        <h2 className="register-title">Sign Up</h2>
+        
+        {error && <p className="register-error">{error}</p>}
+        
+        <form onSubmit={handleRegister} className="register-form">
+          <input 
+            type="text" 
+            placeholder="Username" 
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className="register-input"
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="register-input"
+          />
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="register-button"
+          >
+            {isLoading ? 'Loading...' : 'Sign Up'}
+          </button>
+        </form>
+
+        <p className="register-footer-text">
+          Déjà un compte ? <Link to="/login" className="register-link">Sign In</Link>
+        </p>
+      </div>
     </div>
   );
 }

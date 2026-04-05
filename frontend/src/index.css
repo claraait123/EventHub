@@ -717,7 +717,7 @@ h4 {
 
 .event-list-title {
   font-size: 24px;
-  color: #bdbdbd;
+  color: var(--color-primary);
   margin: 0; 
 }
 
@@ -1162,7 +1162,7 @@ h4 {
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: var(--primary, #0366d6);
+  color: var(--color-primary);
   font-weight: 300;
   font-size: 1.25rem;
 }
@@ -1645,7 +1645,7 @@ h4 {
 .user-profile-name {
   font-size: 2rem;
   margin: 0 0 8px 0;
-  color: #bdbdbd;
+  color: var(--color-primary);
 }
 
 .user-profile-delete-btn {
@@ -1671,7 +1671,7 @@ h4 {
 
 .user-profile-filter-title {
   margin: 0;
-  color: #bdbdbd;
+  color: var(--color-primary);
 }
 
 .user-profile-select {

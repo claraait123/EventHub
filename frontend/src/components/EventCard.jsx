@@ -70,8 +70,15 @@ function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDe
       className="event-custom-card"
     >
       {/* Line 1 : title + buttons */}
-      <div className='card-title'>
-        <h4>{event.title}</h4>
+       <div className='card-title'>
+        <h4>
+          {event.title}
+          {isOwner && (
+            <span className="badge-by-you">
+              {language === 'en' ? 'By you' : 'Par vous'}
+            </span>
+          )}
+        </h4>
 
         <div className="card-button-group" onClick={e => e.stopPropagation()}>
           {canEdit && (

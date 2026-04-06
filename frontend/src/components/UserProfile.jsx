@@ -91,8 +91,9 @@ function UserProfile() {
             className="user-profile-avatar"
           />
           <div className="user-profile-info">
-            <h2 className="user-profile-name">
+             <h2 className="user-profile-name" style={{ display: 'flex', alignItems: 'center' }}>
               {language === 'en' ? `${profile.username}'s Profile` : `Profil de ${profile.username}`}
+              {profile.is_staff && <span className="admin-badge">Admin</span>}
             </h2>
 
             {/* Button visible only for admins and not on their own profile */}

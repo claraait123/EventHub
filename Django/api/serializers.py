@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Event, Participant, Registration, UserProfile
 from django.contrib.auth.models import User
+from datetime import date
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -55,3 +56,8 @@ class EventSerializer(serializers.ModelSerializer):
             return None
         profile, _ = UserProfile.objects.get_or_create(user=obj.creator)
         return profile.get_avatar_url()
+    
+    def validate_date(self, value):
+        if value < date.today():
+            raise serializers.ValidationError("You cannot create or edit an event for a past date.")
+        return value

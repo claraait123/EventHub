@@ -10,6 +10,7 @@ function ParticipantDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('active');
   
   const { language } = useLanguage();
 
@@ -54,7 +55,7 @@ function ParticipantDashboard() {
     
     try {
       await api.delete(`/profiles/${username}/delete/`);
-      setUsers(users.filter(u => u.username !== username));
+      setUsers(users.map(u => u.username === username ? { ...u, is_active: false } : u));
     } catch (err) {
       alert(err.response?.data?.error || (language === 'en' ? 'Could not delete user.' : 'Impossible de supprimer l\'utilisateur.'));
     }
@@ -102,7 +103,11 @@ function ParticipantDashboard() {
     );
   }
 
-  return (
+  const activeUsers = users.filter(u => u.is_active !== false);
+  const deletedUsers = users.filter(u => u.is_active === false);
+  const displayedUsers = activeTab === 'active' ? activeUsers : deletedUsers;
+
+return (
     <div>
       <Navbar />
       <div className="dashboard-container">
@@ -110,39 +115,64 @@ function ParticipantDashboard() {
           👥 {language === 'en' ? 'Registered Accounts' : 'Comptes Inscrits'} ({users.length})
         </h2>
         
+        {/* --- Onglets --- */}
+        <div className="dashboard-menu-tabs">
+          <button 
+            className={`dashboard-menu-btn ${activeTab === 'active' ? 'active' : ''}`}
+            onClick={() => setActiveTab('active')}
+          >
+            {language === 'en' ? 'Active Accounts' : 'Comptes Actifs'} ({activeUsers.length})
+          </button>
+          <button 
+            className={`dashboard-menu-btn ${activeTab === 'deleted' ? 'active' : ''}`}
+            onClick={() => setActiveTab('deleted')}
+          >
+            {language === 'en' ? 'Deleted Accounts' : 'Comptes Supprimés'} ({deletedUsers.length})
+          </button>
+        </div>
+        
+        {/* --- Liste affichée --- */}
         <div className="users-grid">
-          {users.map(user => (
-            <div className="user-card" key={user.id}>
-              
-              {/* Header: Avatar + Username + Date */}
-              <div className="user-card-header">
-                <img src={user.avatar_url} alt={user.username} className="user-avatar" />
-                <div className="user-info">
-                  <h3 
-                    className="user-name" 
-                    onClick={() => navigate(`/${user.username}`)}
-                    title={language === 'en' ? 'View Profile' : 'Voir le profil'}
-                  >
-                    {user.username}
-                    {user.is_staff && <span className="admin-badge">Admin</span>}
-                  </h3>
-                  <p className="user-date">
-                    {language === 'en' ? 'Joined:' : 'Inscrit le :'} {user.date_joined}
-                  </p>
-                </div>
-              </div>
-              
-              {/* Actions: Edit + Delete */}
-              <div className="user-actions">
-                {!user.is_staff && (
-                  <>
-                    <button 
-                      className="btn-action btn-edit" 
-                      onClick={() => handleEdit(user.username)}
+          {displayedUsers.length === 0 ? (
+            <p style={{ color: 'var(--text-secondary)' }}>
+              {language === 'en' ? 'No accounts to show in this section.' : 'Aucun compte à afficher dans cette section.'}
+            </p>
+          ) : (
+            displayedUsers.map(user => (
+              <div className={`user-card ${!user.is_active ? 'user-card-deleted' : ''}`} key={user.id}>
+                
+                <div className="user-card-header">
+                  <img src={user.avatar_url} alt={user.username} className="user-avatar" />
+                  <div className="user-info">
+                    <h3 
+                      className="user-name" 
+                      onClick={() => navigate(`/user/${user.username}`)}
+                      title={language === 'en' ? 'View Profile' : 'Voir le profil'}
+                      style={{ cursor: 'pointer' }}
                     >
-                      ✏️ {language === 'en' ? 'Edit' : 'Modifier'}
-                    </button>
-                    
+                      {user.username}
+                      {user.is_staff && <span className="admin-badge">Admin</span>}
+                      {!user.is_active && <span className="deleted-badge">
+                        {language === 'en' ? 'Deleted' : 'Supprimé'}
+                      </span>}
+                    </h3>
+                    <p className="user-date">
+                      {language === 'en' ? 'Joined:' : 'Inscrit le :'} {user.date_joined}
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Actions: Edit + Delete */}
+                <div className="user-actions">
+                  <button 
+                    className="btn-action btn-edit" 
+                    onClick={() => handleEdit(user.username)}
+                    disabled={!user.is_active} // On empêche d'éditer un compte supprimé
+                  >
+                    ✏️ {language === 'en' ? 'Edit' : 'Modifier'}
+                  </button>
+                  
+                  {user.is_active && (
                     <button 
                       className="btn-action btn-delete" 
                       onClick={() => handleDelete(user.username)}
@@ -155,13 +185,11 @@ function ParticipantDashboard() {
                     >
                       🗑️ {language === 'en' ? 'Delete' : 'Supprimer'}
                     </button>
-                  </>
-                )}
-                
+                  )}
+                </div>
               </div>
-              
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>

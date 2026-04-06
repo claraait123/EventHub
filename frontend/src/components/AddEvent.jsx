@@ -11,6 +11,7 @@ function AddEvent() {
   const [status, setStatus] = useState('planned'); // Default status
   const [error, setError] = useState('');
   const { language } = useLanguage();
+  const today = new Date().toISOString().split("T")[0];
   
   const navigate = useNavigate();
 
@@ -85,6 +86,7 @@ function AddEvent() {
               value={date} 
               onChange={(e) => setDate(e.target.value)} 
               required 
+              min={today} 
               className="add-event-input"
             />
           </div>

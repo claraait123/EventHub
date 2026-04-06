@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
+from datetime import date
 
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -53,10 +54,10 @@ def register_user(request):
     password = request.data.get('password')
     
     if not username or not password:
-        return Response({'error': 'Veuillez fournir un nom d\'utilisateur et un mot de passe.'}, status=400)
+        return Response({'error': 'Please provide a username and password.'}, status=400)
     
     if User.objects.filter(username__iexact=username).exists():
-        return Response({'error': 'Ce nom d\'utilisateur est déjà pris.'}, status=400)
+        return Response({'error': 'This username is already taken.'}, status=400)
     
     # Create the user
     user = User.objects.create_user(username=username, password=password)
@@ -77,7 +78,8 @@ def get_user_profile(request, username):
     return Response({
         'username': user.username,
         'profile_picture': profile.get_avatar_url(),
-        'events': events_data
+        'events': events_data,
+        'is_staff': user.is_staff
     })
 
 @api_view(['GET'])
@@ -91,6 +93,9 @@ def get_current_user(request):
 @api_view(['POST'])
 def join_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
+
+    if event.date < date.today():
+        return Response({'error': 'You cannot join an event that is already in the past.'}, status=400)
 
     if event.status in ['cancelled', 'completed']:
         return Response({'error': 'You cannot join an event that is cancelled or completed.'}, status=400)
@@ -194,7 +199,7 @@ def delete_account(request):
     user = request.user
 
     if user.is_staff or user.is_superuser:
-        return Response({'error': 'Un administrateur ne peut pas supprimer son propre compte.'}, status=403)
+        return Response({'error': 'An administrator cannot delete their own account.'}, status=403)
     
     password = request.data.get('password')
 
@@ -203,7 +208,8 @@ def delete_account(request):
     if not user.check_password(password):
         return Response({'error': 'Incorrect password.'}, status=400)
 
-    user.delete()
+    user.is_active = False
+    user.save()
     return Response({'message': 'Account deleted successfully.'})
 
 @api_view(['DELETE'])
@@ -214,7 +220,7 @@ def delete_user(request, username):
     user_to_delete = get_object_or_404(User, username=username)
 
     if user_to_delete.is_staff or user_to_delete.is_superuser:
-        return Response({'error': 'Impossible de supprimer un administrateur.'}, status=403)
+        return Response({'error': 'An administrator cannot be deleted.'}, status=403)
     
     if user_to_delete == request.user:
         return Response({'error': 'You cannot delete your own account from here.'}, status=400)
@@ -236,7 +242,8 @@ def list_all_users(request):
             'username': u.username,
             'date_joined': u.date_joined.strftime("%B %d, %Y") if u.date_joined else "N/A",
             'avatar_url': profile.get_avatar_url(),
-            'is_staff': u.is_staff
+            'is_staff': u.is_staff,
+            'is_active': u.is_active
         })
     return Response(data)
 
@@ -248,7 +255,7 @@ def admin_edit_user(request, username):
     user_to_edit = get_object_or_404(User, username=username)
 
     if user_to_edit.is_staff or user_to_edit.is_superuser:
-        return Response({'error': 'Impossible de modifier le profil d\'un administrateur.'}, status=403)
+        return Response({'error': 'You cannot modify the profile of an administrator.'}, status=403)
     
     new_username = request.data.get('username')
     

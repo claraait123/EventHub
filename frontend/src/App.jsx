@@ -33,7 +33,7 @@ function App() {
             <Route path="/events/:id" element={<ProtectedRoute><EventDetails /></ProtectedRoute>} />
             <Route path="/add-event" element={<ProtectedRoute><AddEvent /></ProtectedRoute>} />
             <Route path="/participants" element={<ProtectedRoute><ParticipantDashboard /></ProtectedRoute>} />
-            <Route path="/:username" element={<UserProfile />} />
+            <Route path="/user/:username" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
             <Route path="/events/:id/edit" element={<ProtectedRoute><EditEvent /></ProtectedRoute>} />
             <Route path="/my-events" element={<ProtectedRoute><MyEvents /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />

@@ -7,6 +7,7 @@ import LanguageToggle from './LanguageToggle';
 function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -55,14 +56,39 @@ function Register() {
             required
             className="register-input"
           />
-          <input 
-            type="password" 
-            placeholder={language === 'en' ? 'Password' : 'Mot de passe'} 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="register-input"
-          />
+          <div style={{ position: 'relative' }}>
+            <input 
+              type={showPassword ? "text" : "password"} 
+              placeholder={language === 'en' ? 'Password' : 'Mot de passe'} 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="register-input"
+              style={{ width: '100%', paddingRight: '40px', boxSizing: 'border-box' }}
+            />
+            <span 
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+                userSelect: 'none',
+                opacity: 0.7
+              }}
+              title={showPassword 
+                ? (language === 'en' ? 'Hide password' : 'Cacher le mot de passe') 
+                : (language === 'en' ? 'Show password' : 'Afficher le mot de passe')
+              }
+            >
+              <img 
+                src={showPassword ? '/eyeclosed.ico' : '/eyeopen.ico'} 
+                alt={showPassword ? "Cacher" : "Afficher"}
+                style={{ width: '20px', height: '20px' }}
+              />
+            </span>
+          </div>
           <button
             type="submit"
             disabled={isLoading}

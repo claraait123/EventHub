@@ -76,6 +76,10 @@ function Navbar() {
           <img src="/logo.ico" alt="EventHub Logo" onError={(e) => e.target.style.display='none'} />
           <span>EventHub</span>
         </Link>
+
+        <Link to="/events" className="navbar-link">
+          <span>All Events</span>
+        </Link>
         
         {user.is_staff && (
           <Link to="/participants" className="navbar-link">
@@ -88,7 +92,7 @@ function Navbar() {
       <div className="navbar-right">
         <LanguageToggle />
         
-        <Link to={`/${user.username}`} className="navbar-user">
+        <Link to={`/user/${user.username}`} className="navbar-user">
           {user.username}
         </Link>
 
@@ -107,7 +111,7 @@ function Navbar() {
 
           {dropdownOpen && (
             <div className="dropdown-menu">
-              <Link to={`/${user.username}`} className="dropdown-item" onClick={() => setDropdownOpen(false)}>
+              <Link to={`/user/${user.username}`} className="dropdown-item" onClick={() => setDropdownOpen(false)}>
                 {language === 'en' ? 'Profile' : 'Profil'}
               </Link>
               <Link to="/my-events" className="dropdown-item" onClick={() => setDropdownOpen(false)}>

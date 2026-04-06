@@ -53,7 +53,7 @@ function Navbar() {
       <nav className="navbar-container">
         <div className="navbar-left">
           <Link to="/events" className="navbar-brand">
-            <img src="../../public/logo.ico" alt="EventHub Logo" onError={(e) => e.target.style.display='none'} />
+            <img src="/logo.ico" alt="EventHub Logo" onError={(e) => e.target.style.display='none'} />
             <span>EventHub</span>
           </Link>
         </div>

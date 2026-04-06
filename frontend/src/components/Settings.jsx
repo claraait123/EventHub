@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar';
+import { useLanguage } from '../LanguageContext';
 
 function Settings() {
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  
   const [username, setUsername] = useState('');
   const [avatarSeed, setAvatarSeed] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
@@ -52,9 +55,9 @@ function Settings() {
       }
       const res = await api.patch('/settings/', payload);
       setAvatarUrl(res.data.avatar_url);
-      setProfileMsg('Profile updated successfully!');
+      setProfileMsg(language === 'en' ? 'Profile updated successfully!' : 'Profil mis à jour avec succès !');
     } catch (err) {
-      setProfileMsg(`${err.response?.data?.error || 'Error updating profile.'}`);
+      setProfileMsg(`${err.response?.data?.error || (language === 'en' ? 'Error updating profile.' : 'Erreur lors de la mise à jour du profil.')}`);
     }
   };
 
@@ -67,24 +70,28 @@ function Settings() {
         new_password: newPassword,
       });
       localStorage.setItem('token', res.data.token);
-      setPasswordMsg('Password updated successfully!');
+      setPasswordMsg(language === 'en' ? 'Password updated successfully!' : 'Mot de passe mis à jour avec succès !');
       setCurrentPassword('');
       setNewPassword('');
     } catch (err) {
-      setPasswordMsg(`${err.response?.data?.error || 'Error updating password.'}`);
+      setPasswordMsg(`${err.response?.data?.error || (language === 'en' ? 'Error updating password.' : 'Erreur lors de la mise à jour du mot de passe.')}`);
     }
   };
 
   const handleDeleteAccount = async (e) => {
     e.preventDefault();
-    const confirmed = window.confirm('Are you sure? This will permanently delete your account and all your events.');
+    const confirmMessage = language === 'en'
+      ? 'Are you sure? This will permanently delete your account and all your events.'
+      : 'Êtes-vous sûr ? Cela supprimera définitivement votre compte et tous vos événements.';
+      
+    const confirmed = window.confirm(confirmMessage);
     if (!confirmed) return;
     try {
       await api.post('/settings/delete-account/', { password: deletePassword });
       localStorage.removeItem('token');
       navigate('/register');
     } catch (err) {
-      setDeleteMsg(`${err.response?.data?.error || 'Error deleting account.'}`);
+      setDeleteMsg(`${err.response?.data?.error || (language === 'en' ? 'Error deleting account.' : 'Erreur lors de la suppression du compte.')}`);
     }
   };
 
@@ -92,7 +99,7 @@ function Settings() {
     const file = e.target.files[0];
     if (!file) return;
     if (file.size > 2 * 1024 * 1024) {
-      alert('Image must be under 2MB.');
+      alert(language === 'en' ? 'Image must be under 2MB.' : 'L\'image doit faire moins de 2 Mo.');
       return;
     }
 
@@ -115,19 +122,33 @@ function Settings() {
   };
 
   // Helper to determine whether a message is success or error
-  const isSuccess = (msg) => msg.toLowerCase().includes('success');
+  // Modified to detect both English and French success words
+  const isSuccess = (msg) => msg.toLowerCase().includes('success') || msg.toLowerCase().includes('succès');
 
-  if (loading) return <div><Navbar /><p style={{ padding: '20px' }}>Loading...</p></div>;
+  if (loading) {
+    return (
+      <div>
+        <Navbar />
+        <p style={{ padding: '20px' }}>
+          {language === 'en' ? 'Loading...' : 'Chargement...'}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>
       <Navbar />
       <div className="settings-container">
-        <h2 className="settings-title">Account Settings</h2>
+        <h2 className="settings-title">
+          {language === 'en' ? 'Account Settings' : 'Paramètres du compte'}
+        </h2>
 
         {/* SECTION: Profile */}
         <div className="settings-section">
-          <h3 className="settings-section-title">Profile</h3>
+          <h3 className="settings-section-title">
+            {language === 'en' ? 'Profile' : 'Profil'}
+          </h3>
           
           <form onSubmit={handleProfileSave} className="settings-form">
             <div className="settings-avatar-row">
@@ -137,21 +158,23 @@ function Settings() {
                 className="settings-avatar-img"
               />
               <div className="settings-avatar-options">
-                <p className="settings-avatar-options-title">Choose avatar type:</p>
+                <p className="settings-avatar-options-title">
+                  {language === 'en' ? 'Choose avatar type:' : 'Choisissez le type d\'avatar :'}
+                </p>
                 <div className="settings-avatar-toggles">
                   <button
                     type="button"
                     onClick={() => setAvatarMode('seed')}
                     className={`settings-toggle-btn ${avatarMode === 'seed' ? 'active' : ''}`}
                   >
-                    🎲 Generated
+                    🎲 {language === 'en' ? 'Generated' : 'Généré'}
                   </button>
                   <button
                     type="button"
                     onClick={() => setAvatarMode('upload')}
                     className={`settings-toggle-btn ${avatarMode === 'upload' ? 'active' : ''}`}
                   >
-                    📷 Upload photo
+                    📷 {language === 'en' ? 'Upload photo' : 'Télécharger une photo'}
                   </button>
                 </div>
               </div>
@@ -159,21 +182,27 @@ function Settings() {
 
             {avatarMode === 'seed' && (
               <div>
-                <label className="settings-label">Avatar seed (any text)</label>
+                <label className="settings-label">
+                  {language === 'en' ? 'Avatar seed (any text)' : 'Graine d\'avatar (n\'importe quel texte)'}
+                </label>
                 <input
                   type="text"
                   value={avatarSeed}
                   onChange={(e) => setAvatarSeed(e.target.value)}
-                  placeholder="Default: your username"
+                  placeholder={language === 'en' ? 'Default: your username' : 'Par défaut : votre nom d\'utilisateur'}
                   className="settings-input"
                 />
-                <p className="settings-hint">Type any word to generate a unique avatar.</p>
+                <p className="settings-hint">
+                  {language === 'en' ? 'Type any word to generate a unique avatar.' : 'Tapez n\'importe quel mot pour générer un avatar unique.'}
+                </p>
               </div>
             )}
 
             {avatarMode === 'upload' && (
               <div>
-                <label className="settings-label">Upload a photo (max 2MB)</label>
+                <label className="settings-label">
+                  {language === 'en' ? 'Upload a photo (max 2MB)' : 'Télécharger une photo (max 2 Mo)'}
+                </label>
                 <input
                   type="file"
                   accept="image/*"
@@ -183,14 +212,16 @@ function Settings() {
                 />
                 {imagePreview && (
                   <p className="settings-hint settings-hint-success">
-                    Image ready — click "Save Profile" to apply.
+                    {language === 'en' ? 'Image ready — click "Save Profile" to apply.' : 'Image prête — cliquez sur "Enregistrer le profil" pour l\'appliquer.'}
                   </p>
                 )}
               </div>
             )}
 
             <div>
-              <label className="settings-label">Username</label>
+              <label className="settings-label">
+                {language === 'en' ? 'Username' : 'Nom d\'utilisateur'}
+              </label>
               <input
                 type="text"
                 value={username}
@@ -206,16 +237,22 @@ function Settings() {
               </p>
             )}
             
-            <button type="submit" className="settings-btn settings-btn-primary">Save Profile</button>
+            <button type="submit" className="settings-btn settings-btn-primary">
+              {language === 'en' ? 'Save Profile' : 'Enregistrer le profil'}
+            </button>
           </form>
         </div>
 
         {/* SECTION: Password */}
         <div className="settings-section">
-          <h3 className="settings-section-title">Change Password</h3>
+          <h3 className="settings-section-title">
+            {language === 'en' ? 'Change Password' : 'Changer de mot de passe'}
+          </h3>
           <form onSubmit={handlePasswordChange} className="settings-form">
             <div>
-              <label className="settings-label">Current password</label>
+              <label className="settings-label">
+                {language === 'en' ? 'Current password' : 'Mot de passe actuel'}
+              </label>
               <input 
                 type="password" 
                 value={currentPassword} 
@@ -225,7 +262,9 @@ function Settings() {
               />
             </div>
             <div>
-              <label className="settings-label">New password (min. 8 characters)</label>
+              <label className="settings-label">
+                {language === 'en' ? 'New password (min. 8 characters)' : 'Nouveau mot de passe (min. 8 caractères)'}
+              </label>
               <input 
                 type="password" 
                 value={newPassword} 
@@ -241,33 +280,43 @@ function Settings() {
               </p>
             )}
 
-            <button type="submit" className="settings-btn settings-btn-success">Update Password</button>
+            <button type="submit" className="settings-btn settings-btn-success">
+              {language === 'en' ? 'Update Password' : 'Mettre à jour le mot de passe'}
+            </button>
           </form>
         </div>
 
-        {/* SECTION : Supprimer le compte */}
+        {/* SECTION : Delete Account */}
         <div className="settings-section settings-section-danger">
-          <h3 className="settings-danger-title">Danger Zone</h3>
+          <h3 className="settings-danger-title">
+            {language === 'en' ? 'Danger Zone' : 'Zone de danger'}
+          </h3>
           <p className="settings-danger-desc">
-            Deleting your account is permanent. All your events and data will be lost.
+            {language === 'en' 
+              ? 'Deleting your account is permanent. All your events and data will be lost.' 
+              : 'La suppression de votre compte est définitive. Tous vos événements et données seront perdus.'}
           </p>
           
           <form onSubmit={handleDeleteAccount} className="settings-form">
             <div>
-              <label className="settings-label">Confirm with your password</label>
+              <label className="settings-label">
+                {language === 'en' ? 'Confirm with your password' : 'Confirmez avec votre mot de passe'}
+              </label>
               <input 
                 type="password" 
                 value={deletePassword} 
                 onChange={(e) => setDeletePassword(e.target.value)} 
                 required 
                 className="settings-input" 
-                placeholder="Enter your password to confirm" 
+                placeholder={language === 'en' ? 'Enter your password to confirm' : 'Entrez votre mot de passe pour confirmer'} 
               />
             </div>
             
             {deleteMsg && <p className="settings-msg settings-msg-error">{deleteMsg}</p>}
             
-            <button type="submit" className="settings-btn settings-btn-danger">🗑️ Delete My Account</button>
+            <button type="submit" className="settings-btn settings-btn-danger">
+              🗑️ {language === 'en' ? 'Delete My Account' : 'Supprimer mon compte'}
+            </button>
           </form>
         </div>
 

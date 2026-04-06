@@ -1,7 +1,8 @@
-
+import { useLanguage } from '../LanguageContext';
 
 function Footer() {
   const year = new Date().getFullYear();
+  const { language } = useLanguage();
 
   return (
     <footer className="footer-container">
@@ -10,7 +11,7 @@ function Footer() {
       </p>
 
       <p className="footer-team-title">
-        TEAM
+        {language === 'en' ? 'TEAM' : 'ÉQUIPE'}
       </p>
 
       <div className="footer-team-container">
@@ -35,7 +36,7 @@ function Footer() {
       </div>
 
       <p className="footer-copyright">
-        © {year} EventHub — Web Programming Project M1
+        © {year} EventHub — {language === 'en' ? 'Web Programming Project M1' : 'Projet de Programmation Web M1'}
       </p>
     </footer>
   );

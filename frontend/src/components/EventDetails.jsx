@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar';
+import { useLanguage } from '../LanguageContext';
 
 function EventDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { language } = useLanguage();
+
   const [event, setEvent] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -32,11 +35,34 @@ function EventDetails() {
     currentUser.is_staff || currentUser.id === event.creator
   );
 
-  if (loading) return <div><Navbar /><p className="messages">Loading...</p></div>;
-  if (!event) return <div><Navbar /><p className="messages">Event not found.</p></div>;
+  if (loading) {
+    return (
+      <div>
+        <Navbar />
+        <p className="messages">
+          {language === 'en' ? 'Loading...' : 'Chargement...'}
+        </p>
+      </div>
+    );
+  }
+
+  if (!event) {
+    return (
+      <div>
+        <Navbar />
+        <p className="messages">
+          {language === 'en' ? 'Event not found.' : 'Événement introuvable.'}
+        </p>
+      </div>
+    );
+  }
 
   const handleRemove = async (memberId, memberUsername) => {
-    const confirmed = window.confirm(`Remove ${memberUsername} from this event?`);
+    const confirmMessage = language === 'en'
+      ? `Remove ${memberUsername} from this event?`
+      : `Retirer ${memberUsername} de cet événement ?`;
+      
+    const confirmed = window.confirm(confirmMessage);
     if (!confirmed) return;
 
     try {
@@ -46,15 +72,25 @@ function EventDetails() {
         members: prev.members.filter(m => m.id !== memberId)
       }));
     } catch (err) {
-      alert('Could not remove participant.');
+      alert(language === 'en' ? 'Could not remove participant.' : 'Impossible de retirer le participant.');
     }
+  };
+
+  // Helper object to translate statuses for display
+  const translatedStatus = {
+    planned: language === 'en' ? 'Planned' : 'Planifié',
+    ongoing: language === 'en' ? 'Ongoing' : 'En cours',
+    completed: language === 'en' ? 'Completed' : 'Terminé',
+    cancelled: language === 'en' ? 'Cancelled' : 'Annulé'
   };
 
   return (
     <div>
       <Navbar />
       <div className="event-details-container">
-        <Link to="/events" className="event-details-link">Click here to see more events</Link>
+        <Link to="/events" className="event-details-link">
+          {language === 'en' ? 'Click here to see more events' : 'Cliquez ici pour voir plus d\'événements'}
+        </Link>
 
         <div className="event-details-header">
           <h2 className="event-details-title">{event.title}</h2>
@@ -64,13 +100,13 @@ function EventDetails() {
               onClick={() => navigate(`/events/${id}/edit`)}
               className="event-details-edit-btn"
             >
-              ✏️ Edit Event
+              ✏️ {language === 'en' ? 'Edit Event' : 'Modifier l\'événement'}
             </button>
           )}
         </div>
 
         <p className="event-details-creator-info">
-          Created by{' '}
+          {language === 'en' ? 'Created by ' : 'Créé par '}
           <span
             onClick={() => navigate(`/${event.creator_username}`)}
             className="event-details-link"
@@ -79,11 +115,16 @@ function EventDetails() {
           </span>
         </p>
         
-        <p><strong>Date:</strong> {event.date}</p>
-        <p><strong>Status:</strong> {event.status}</p>
-        <p><strong>Description:</strong> {event.description || 'No description provided.'}</p>
+        <p><strong>{language === 'en' ? 'Date:' : 'Date :'}</strong> {event.date}</p>
+        <p><strong>{language === 'en' ? 'Status:' : 'Statut :'}</strong> {translatedStatus[event.status] || event.status}</p>
+        <p>
+          <strong>{language === 'en' ? 'Description:' : 'Description :'}</strong>{' '}
+          {event.description || (language === 'en' ? 'No description provided.' : 'Aucune description fournie.')}
+        </p>
 
-        <h3>Registered Participants ({event.members ? event.members.length : 0})</h3>
+        <h3>
+          {language === 'en' ? 'Registered Participants' : 'Participants Inscrits'} ({event.members ? event.members.length : 0})
+        </h3>
         
         {event.members && event.members.length > 0 ? (
           <ul className="event-details-participants-list">
@@ -106,14 +147,16 @@ function EventDetails() {
                     onClick={() => handleRemove(member.id, member.username)}
                     className="event-details-remove-btn"
                   >
-                    Remove
+                    {language === 'en' ? 'Remove' : 'Retirer'}
                   </button>
                 )}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="event-details-empty">No participants yet. Be the first to join!</p>
+          <p className="event-details-empty">
+            {language === 'en' ? 'No participants yet. Be the first to join!' : 'Aucun participant pour l\'instant. Soyez le premier à rejoindre !'}
+          </p>
         )}
       </div>
     </div>

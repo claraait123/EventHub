@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar';
+import { useLanguage } from '../LanguageContext';
 
 function MyEvents() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { language } = useLanguage();
 
   useEffect(() => {
     const fetchMyEvents = async () => {
@@ -27,23 +29,46 @@ function MyEvents() {
       await api.post(`/events/${eventId}/leave/`);
       setEvents(prev => prev.filter(e => e.id !== eventId));
     } catch (err) {
-      alert('Could not leave event.');
+      alert(language === 'en' ? 'Could not leave event.' : 'Impossible de quitter l\'événement.');
     }
   };
 
-  if (loading) return <div><Navbar /><p style={{ padding: '20px' }}>Loading...</p></div>;
+  if (loading) {
+    return (
+      <div>
+        <Navbar />
+        <p style={{ padding: '20px' }}>
+          {language === 'en' ? 'Loading...' : 'Chargement...'}
+        </p>
+      </div>
+    );
+  }
+
+  // Helper object to translate statuses for display
+  const translatedStatus = {
+    planned: language === 'en' ? 'Planned' : 'Planifié',
+    ongoing: language === 'en' ? 'Ongoing' : 'En cours',
+    completed: language === 'en' ? 'Completed' : 'Terminé',
+    cancelled: language === 'en' ? 'Cancelled' : 'Annulé'
+  };
 
   return (
     <div>
       <Navbar />
       <div className="my-events-container">
-        <h2 className="my-events-title">My Joined Events</h2>
+        <h2 className="my-events-title">
+          {language === 'en' ? 'My Joined Events' : 'Mes Événements Rejoints'}
+        </h2>
 
         {events.length === 0 ? (
           <div className="my-events-empty">
-            <p className="my-events-empty-text">You haven't joined any events yet.</p>
+            <p className="my-events-empty-text">
+              {language === 'en' 
+                ? "You haven't joined any events yet." 
+                : "Vous n'avez rejoint aucun événement pour le moment."}
+            </p>
             <Link to="/events" className="my-events-browse-btn">
-              Browse Events
+              {language === 'en' ? 'Browse Events' : 'Parcourir les événements'}
             </Link>
           </div>
         ) : (
@@ -57,17 +82,19 @@ function MyEvents() {
                     onClick={() => handleLeave(event.id)}
                     className="my-event-leave-btn"
                   >
-                    ✖ Leave
+                    ✖ {language === 'en' ? 'Leave' : 'Quitter'}
                   </button>
                 </div>
 
                 <div className="my-event-card-meta">
-                  <span><strong>Date:</strong> {event.date}</span>
+                  <span>
+                    <strong>{language === 'en' ? 'Date:' : 'Date :'}</strong> {event.date}
+                  </span>
                   <span className="my-event-status-wrapper">
-                    <strong>Status:</strong>
-                    {/* Dynamically generate the status badge class */}
+                    <strong>{language === 'en' ? 'Status:' : 'Statut :'}</strong>
+                    {/* Dynamically generate the status badge class based on the raw status */}
                     <span className={`my-event-badge status-${event.status || 'default'}`}>
-                      {event.status}
+                      {translatedStatus[event.status] || event.status}
                     </span>
                   </span>
                 </div>
@@ -77,7 +104,7 @@ function MyEvents() {
                 )}
 
                 <Link to={`/events/${event.id}`} className="my-event-card-link">
-                  View details →
+                  {language === 'en' ? 'View details →' : 'Voir les détails →'}
                 </Link>
               </div>
             ))}

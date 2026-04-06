@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
+import { useLanguage } from '../LanguageContext';
+import LanguageToggle from './LanguageToggle';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -8,6 +10,8 @@ function Navbar() {
   const [profileData, setProfileData] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  
+  const { language } = useLanguage();
 
   // Load user info
   useEffect(() => {
@@ -57,6 +61,9 @@ function Navbar() {
             <span>EventHub</span>
           </Link>
         </div>
+        <div className="navbar-right">
+          <LanguageToggle />
+        </div>
       </nav>
     );
   }
@@ -72,13 +79,15 @@ function Navbar() {
         
         {user.is_staff && (
           <Link to="/participants" className="navbar-link">
-            👥 Manage Users
+            👥 {language === 'en' ? 'Manage Users' : 'Gérer les Utilisateurs'}
           </Link>
         )}
       </div>
 
       {/* RIGHT: Username + Avatar / Dropdown */}
       <div className="navbar-right">
+        <LanguageToggle />
+        
         <Link to={`/${user.username}`} className="navbar-user">
           {user.username}
         </Link>
@@ -99,22 +108,22 @@ function Navbar() {
           {dropdownOpen && (
             <div className="dropdown-menu">
               <Link to={`/${user.username}`} className="dropdown-item" onClick={() => setDropdownOpen(false)}>
-                Profile
+                {language === 'en' ? 'Profile' : 'Profil'}
               </Link>
               <Link to="/my-events" className="dropdown-item" onClick={() => setDropdownOpen(false)}>
-                My Events
+                {language === 'en' ? 'My Events' : 'Mes Événements'}
               </Link>
               <Link to="/settings" className="dropdown-item" onClick={() => setDropdownOpen(false)}>
-                Settings
+                {language === 'en' ? 'Settings' : 'Paramètres'}
               </Link>
               <Link to="/add-event" className="dropdown-item" onClick={() => setDropdownOpen(false)}>
-                Add Event
+                {language === 'en' ? 'Add Event' : 'Ajouter un Événement'}
               </Link>
               
               <div className="dropdown-divider"></div>
               
               <button onClick={handleLogout} className="dropdown-item dropdown-logout">
-                Log out
+                {language === 'en' ? 'Log out' : 'Se déconnecter'}
               </button>
             </div>
           )}

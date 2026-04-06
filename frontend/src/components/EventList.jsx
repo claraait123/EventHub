@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 import Navbar from './Navbar';
 import EventCard from './EventCard';
+import { useLanguage } from '../LanguageContext';
 
 function EventList() {
   const [events, setEvents] = useState([]);
@@ -13,6 +14,8 @@ function EventList() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [joinedEventIds, setJoinedEventIds] = useState(new Set());
+  
+  const { language } = useLanguage();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,14 +32,14 @@ function EventList() {
         setCurrentUser(userRes.data);
         setJoinedEventIds(new Set(myEventsRes.data.map(e => e.id)));
       } catch (err) {
-        setError('Error loading events.');
+        setError(language === 'en' ? 'Error loading events.' : 'Erreur lors du chargement des événements.');
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, [statusFilter]);
-  
+  }, [statusFilter, language]); // Added language to dependency array for error translation
+
   const filteredEvents = events.filter(event =>
     event.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -46,7 +49,7 @@ function EventList() {
       await api.post(`/events/${eventId}/join/`);
       setJoinedEventIds(prev => new Set([...prev, eventId]));
     } catch (err) {
-      alert(err.response?.data?.error || 'Could not join event.');
+      alert(err.response?.data?.error || (language === 'en' ? 'Could not join event.' : 'Impossible de rejoindre l\'événement.'));
     }
   };
 
@@ -55,19 +58,23 @@ function EventList() {
       await api.post(`/events/${eventId}/leave/`);
       setJoinedEventIds(prev => { const next = new Set(prev); next.delete(eventId); return next; });
     } catch (err) {
-      alert('Could not leave event.');
+      alert(language === 'en' ? 'Could not leave event.' : 'Impossible de quitter l\'événement.');
     }
   };
 
   const handleDelete = async (eventId, eventTitle) => {
-    const confirmed = window.confirm(`Are you sure you want to delete "${eventTitle}"? This action cannot be undone.`);
+    const confirmMessage = language === 'en' 
+      ? `Are you sure you want to delete "${eventTitle}"? This action cannot be undone.` 
+      : `Êtes-vous sûr de vouloir supprimer "${eventTitle}" ? Cette action est irréversible.`;
+      
+    const confirmed = window.confirm(confirmMessage);
     if (!confirmed) return;
 
     try {
       await api.delete(`/events/${eventId}/`);
       setEvents(prev => prev.filter(e => e.id !== eventId));
     } catch (err) {
-      alert('Could not delete event.');
+      alert(language === 'en' ? 'Could not delete event.' : 'Impossible de supprimer l\'événement.');
     }
   };
 
@@ -76,9 +83,11 @@ function EventList() {
       <Navbar />
       <div style={{ padding: '20px' }}>
         <div className="event-list-container">
-           <h2 className="event-list-title">All Events</h2>
+           <h2 className="event-list-title">
+             {language === 'en' ? 'All Events' : 'Tous les Événements'}
+           </h2>
           <Link to="/add-event" id="AddEventButton">
-            + New Event
+            {language === 'en' ? '+ New Event' : '+ Nouvel Événement'}
           </Link>
         </div>
 
@@ -86,7 +95,7 @@ function EventList() {
         <div className="search">
           <input
             type="text"
-            placeholder="Search by title..."
+            placeholder={language === 'en' ? 'Search by title...' : 'Rechercher par titre...'}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="search-input"
@@ -96,25 +105,23 @@ function EventList() {
             value={statusFilter}
             style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', cursor: 'pointer' }}
           >
-            <option value="">All statuses</option>
-            <option value="planned">Planned</option>
-            <option value="ongoing">Ongoing</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
+            <option value="">{language === 'en' ? 'All statuses' : 'Tous les statuts'}</option>
+            <option value="planned">{language === 'en' ? 'Planned' : 'Planifié'}</option>
+            <option value="ongoing">{language === 'en' ? 'Ongoing' : 'En cours'}</option>
+            <option value="completed">{language === 'en' ? 'Completed' : 'Terminé'}</option>
+            <option value="cancelled">{language === 'en' ? 'Cancelled' : 'Annulé'}</option>
           </select>
         </div>
 
-        {loading && <p>Loading...</p>}
+        {loading && <p>{language === 'en' ? 'Loading...' : 'Chargement...'}</p>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
         {!loading && filteredEvents.length === 0 && (
           <p style={{ color: '#777', fontStyle: 'italic' }}>
-            {searchQuery ? `No events matching "${searchQuery}".` : 'No events found.'}
+            {searchQuery 
+              ? (language === 'en' ? `No events matching "${searchQuery}".` : `Aucun événement ne correspond à "${searchQuery}".`) 
+              : (language === 'en' ? 'No events found.' : 'Aucun événement trouvé.')}
           </p>
         )}
-
-        {loading && <p>Loading...</p>}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {!loading && events.length === 0 && <p>No events found.</p>}
 
         <div className="events-grid">
           {filteredEvents.map(event => (

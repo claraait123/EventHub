@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { LanguageProvider } from './LanguageContext';
+import LanguageToggle from './components/LanguageToggle';
 import ThemeToggle from './components/ThemeToggle';
 import Login from './components/Login';
 import EventList from './components/EventList';
@@ -20,10 +22,11 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    <Router>
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ flex: 1 }}>
-          <Routes>
+    <LanguageProvider>
+      <Router>
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ flex: 1 }}>
+            <Routes>
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/events" element={<ProtectedRoute><EventList /></ProtectedRoute>} />
@@ -40,10 +43,12 @@ function App() {
         
         <Footer />
         
-        <ThemeToggle />
-        
-      </div>
-    </Router>
+         <LanguageToggle />
+          <ThemeToggle />
+          
+        </div>
+      </Router>
+    </LanguageProvider>
   );
 }
 

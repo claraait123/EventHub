@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
+import { useLanguage } from '../LanguageContext';
 
 function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDelete }) {
   const navigate = useNavigate();
+  const { language } = useLanguage();
 
   const canEdit = currentUser && (
     currentUser.is_staff || currentUser.id === event.creator
@@ -16,7 +18,7 @@ function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDe
       await api.post(`/events/${event.id}/join/`);
       setJoinedEventIds(prev => new Set([...prev, event.id]));
     } catch (err) {
-      alert(err.response?.data?.error || 'Could not join event.');
+      alert(err.response?.data?.error || (language === 'en' ? 'Could not join event.' : 'Impossible de rejoindre l\'événement.'));
     }
   };
 
@@ -26,19 +28,23 @@ function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDe
       await api.post(`/events/${event.id}/leave/`);
       setJoinedEventIds(prev => { const next = new Set(prev); next.delete(event.id); return next; });
     } catch (err) {
-      alert('Could not leave event.');
+      alert(language === 'en' ? 'Could not leave event.' : 'Impossible de quitter l\'événement.');
     }
   };
 
   const handleDelete = async (e) => {
     e.stopPropagation();
-    const confirmed = window.confirm(`Delete "${event.title}"? This cannot be undone.`);
+    const confirmMessage = language === 'en' 
+      ? `Delete "${event.title}"? This cannot be undone.` 
+      : `Supprimer "${event.title}" ? Cette action est irréversible.`;
+      
+    const confirmed = window.confirm(confirmMessage);
     if (!confirmed) return;
     try {
       await api.delete(`/events/${event.id}/`);
       onDelete && onDelete(event.id);
     } catch {
-      alert('Could not delete event.');
+      alert(language === 'en' ? 'Could not delete event.' : 'Impossible de supprimer l\'événement.');
     }
   };
 
@@ -50,12 +56,20 @@ function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDe
   };
   const statusStyle = statusColors[event.status] || { bg: '#f0f0f0', text: '#333' };
 
+  // Helper object to translate statuses for display
+  const translatedStatus = {
+    planned: language === 'en' ? 'Planned' : 'Planifié',
+    ongoing: language === 'en' ? 'Ongoing' : 'En cours',
+    completed: language === 'en' ? 'Completed' : 'Terminé',
+    cancelled: language === 'en' ? 'Cancelled' : 'Annulé'
+  };
+
   return (
     <div
       onClick={() => navigate(`/events/${event.id}`)}
       className="event-custom-card"
     >
-      {/* Ligne 1 : titre + boutons */}
+      {/* Line 1 : title + buttons */}
       <div className='card-title'>
         <h4>{event.title}</h4>
 
@@ -66,13 +80,13 @@ function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDe
                 onClick={(e) => { e.stopPropagation(); navigate(`/events/${event.id}/edit`); }}
                 className="card-button edit-button"
               >
-                ✏️ Edit
+                ✏️ {language === 'en' ? 'Edit' : 'Modifier'}
               </button>
               <button
                 onClick={handleDelete}
                 className="card-button delete-button"
               >
-                🗑️ Delete
+                🗑️ {language === 'en' ? 'Delete' : 'Supprimer'}
               </button>
             </>
           )}
@@ -83,21 +97,21 @@ function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDe
                 onClick={handleLeave}
                 className="card-button leave-button"
               >
-                ✖ Leave
+                ✖ {language === 'en' ? 'Leave' : 'Quitter'}
               </button>
             ) : (
               <button
                 onClick={handleJoin}
                 className="card-button join-button"
               >
-                ✚ Join
+                ✚ {language === 'en' ? 'Join' : 'Rejoindre'}
               </button>
             )
           )}
         </div>
       </div>
 
-      {/* Ligne 2 : auteur + date + statut */}
+      {/* Line 2 : author + date + status */}
       <div className="card-infos">
         <img
           src={event.creator_avatar}
@@ -116,7 +130,7 @@ function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDe
         <span className='card-date'>{event.date}</span>
         <span className="card-info-separator">·</span>
         <span className="card-status" style={{backgroundColor: statusStyle.bg, color: statusStyle.text}}>
-          {event.status}
+          {translatedStatus[event.status] || event.status}
         </span>
       </div>
     </div>

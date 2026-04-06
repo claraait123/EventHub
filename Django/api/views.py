@@ -54,10 +54,10 @@ def register_user(request):
     
     if not username or not password:
         return Response({'error': 'Veuillez fournir un nom d\'utilisateur et un mot de passe.'}, status=400)
-        
-    if User.objects.filter(username=username).exists():
+    
+    if User.objects.filter(username__iexact=username).exists():
         return Response({'error': 'Ce nom d\'utilisateur est déjà pris.'}, status=400)
-        
+    
     # Create the user
     user = User.objects.create_user(username=username, password=password)
     
@@ -91,6 +91,9 @@ def get_current_user(request):
 @api_view(['POST'])
 def join_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
+
+    if event.status in ['cancelled', 'completed']:
+        return Response({'error': 'You cannot join an event that is cancelled or completed.'}, status=400)
     
     if event.creator == request.user:
         return Response({'error': "You can't join your own event."}, status=400)
@@ -142,7 +145,7 @@ def user_settings(request):
         new_image = request.data.get('avatar_image')  # base64
 
         if new_username:
-            if User.objects.filter(username=new_username).exclude(id=user.id).exists():
+            if User.objects.filter(username__iexact=new_username).exclude(id=user.id).exists():
                 return Response({'error': 'This username is already taken.'}, status=400)
             user.username = new_username
             user.save()
@@ -189,6 +192,10 @@ def change_password(request):
 @api_view(['POST'])
 def delete_account(request):
     user = request.user
+
+    if user.is_staff or user.is_superuser:
+        return Response({'error': 'Un administrateur ne peut pas supprimer son propre compte.'}, status=403)
+    
     password = request.data.get('password')
 
     if not password:
@@ -205,6 +212,9 @@ def delete_user(request, username):
         return Response({'error': 'Not allowed.'}, status=403)
     
     user_to_delete = get_object_or_404(User, username=username)
+
+    if user_to_delete.is_staff or user_to_delete.is_superuser:
+        return Response({'error': 'Impossible de supprimer un administrateur.'}, status=403)
     
     if user_to_delete == request.user:
         return Response({'error': 'You cannot delete your own account from here.'}, status=400)
@@ -236,10 +246,14 @@ def admin_edit_user(request, username):
         return Response({'error': 'Not allowed'}, status=403)
     
     user_to_edit = get_object_or_404(User, username=username)
+
+    if user_to_edit.is_staff or user_to_edit.is_superuser:
+        return Response({'error': 'Impossible de modifier le profil d\'un administrateur.'}, status=403)
+    
     new_username = request.data.get('username')
     
     if new_username and new_username != user_to_edit.username:
-        if User.objects.filter(username=new_username).exists():
+        if User.objects.filter(username__iexact=new_username).exists():
             return Response({'error': 'Username already taken.'}, status=400)
         user_to_edit.username = new_username
         user_to_edit.save()

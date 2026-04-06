@@ -134,24 +134,30 @@ function ParticipantDashboard() {
               
               {/* Actions: Edit + Delete */}
               <div className="user-actions">
-                <button 
-                  className="btn-action btn-edit" 
-                  onClick={() => handleEdit(user.username)}
-                >
-                  ✏️ {language === 'en' ? 'Edit' : 'Modifier'}
-                </button>
-                <button 
-                  className="btn-action btn-delete" 
-                  onClick={() => handleDelete(user.username)}
-                  disabled={user.username === currentUser.username}
-                  title={
-                    user.username === currentUser.username 
-                      ? (language === 'en' ? "You cannot delete your own account here." : "Vous ne pouvez pas supprimer votre propre compte ici.") 
-                      : (language === 'en' ? "Delete user" : "Supprimer l'utilisateur")
-                  }
-                >
-                  🗑️ {language === 'en' ? 'Delete' : 'Supprimer'}
-                </button>
+                {!user.is_staff && (
+                  <>
+                    <button 
+                      className="btn-action btn-edit" 
+                      onClick={() => handleEdit(user.username)}
+                    >
+                      ✏️ {language === 'en' ? 'Edit' : 'Modifier'}
+                    </button>
+                    
+                    <button 
+                      className="btn-action btn-delete" 
+                      onClick={() => handleDelete(user.username)}
+                      disabled={user.username === currentUser.username}
+                      title={
+                        user.username === currentUser.username 
+                          ? (language === 'en' ? "You cannot delete your own account here." : "Vous ne pouvez pas supprimer votre propre compte ici.") 
+                          : (language === 'en' ? "Delete user" : "Supprimer l'utilisateur")
+                      }
+                    >
+                      🗑️ {language === 'en' ? 'Delete' : 'Supprimer'}
+                    </button>
+                  </>
+                )}
+                
               </div>
               
             </div>

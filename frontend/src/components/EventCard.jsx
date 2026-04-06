@@ -99,14 +99,14 @@ function EventCard({ event, currentUser, joinedEventIds, setJoinedEventIds, onDe
               >
                 ✖ {language === 'en' ? 'Leave' : 'Quitter'}
               </button>
-            ) : (
+            ) : event.status !== 'cancelled' && event.status !== 'completed' ? (
               <button
                 onClick={handleJoin}
                 className="card-button join-button"
               >
                 ✚ {language === 'en' ? 'Join' : 'Rejoindre'}
               </button>
-            )
+            ) : null
           )}
         </div>
       </div>

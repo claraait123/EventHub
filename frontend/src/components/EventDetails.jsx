@@ -76,7 +76,6 @@ function EventDetails() {
     }
   };
 
-  // Helper object to translate statuses for display
   const translatedStatus = {
     planned: language === 'en' ? 'Planned' : 'Planifié',
     ongoing: language === 'en' ? 'Ongoing' : 'En cours',
@@ -87,13 +86,14 @@ function EventDetails() {
   return (
     <div>
       <Navbar />
-      <div className="event-details-container">
-        <Link to="/events" className="event-details-link">
-          {language === 'en' ? 'Click here to see more events' : 'Cliquez ici pour voir plus d\'événements'}
+      
+      <div className="event-details-embed-container">
+        <Link to="/events" style={{display: 'inline-block', marginBottom: '15px', textDecoration: 'none', color: '#0366d6'}}>
+          {language === 'en' ? '← Back to events' : '← Retour aux événements'}
         </Link>
 
-        <div className="event-details-header">
-          <h2 className="event-details-title">{event.title}</h2>
+        <div className="event-details-embed-header">
+          <h2 className="event-details-embed-title">{event.title}</h2>
 
           {canEdit && (
             <button
@@ -105,59 +105,76 @@ function EventDetails() {
           )}
         </div>
 
-        <p className="event-details-creator-info">
-          {language === 'en' ? 'Created by ' : 'Créé par '}
-          <span
-            onClick={() => navigate(`/${event.creator_username}`)}
-            className="event-details-link"
-          >
-            {event.creator_username}
-          </span>
-        </p>
-        
-        <p><strong>{language === 'en' ? 'Date:' : 'Date :'}</strong> {event.date}</p>
-        <p><strong>{language === 'en' ? 'Status:' : 'Statut :'}</strong> {translatedStatus[event.status] || event.status}</p>
-        <p>
-          <strong>{language === 'en' ? 'Description:' : 'Description :'}</strong>{' '}
-          {event.description || (language === 'en' ? 'No description provided.' : 'Aucune description fournie.')}
-        </p>
+        <div className="event-details-embed-section">
+          <div className="event-details-info-row">
+            <span className="event-details-info-label">{language === 'en' ? 'Created by:' : 'Créé par :'}</span>
+            <span
+              onClick={() => navigate(`/${event.creator_username}`)}
+              style={{cursor: 'pointer', color: '#0366d6'}}
+              onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
+              onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
+            >
+              {event.creator_username}
+            </span>
+          </div>
 
-        <h3>
-          {language === 'en' ? 'Registered Participants' : 'Participants Inscrits'} ({event.members ? event.members.length : 0})
-        </h3>
-        
-        {event.members && event.members.length > 0 ? (
-          <ul className="event-details-participants-list">
-            {event.members.map(member => (
-              <li key={member.id} className="event-details-participant-item">
-                <img
-                  src={member.avatar_url}
-                  alt={member.username}
-                  className="event-details-avatar"
-                />
-                <span
-                  onClick={() => navigate(`/${member.username}`)}
-                  className="event-details-username"
-                >
-                  {member.username}
-                </span>
+          <div className="event-details-info-row">
+            <span className="event-details-info-label">{language === 'en' ? 'Date:' : 'Date :'}</span>
+            <span>{event.date}</span>
+          </div>
 
-                {canEdit && (
-                  <button
-                    onClick={() => handleRemove(member.id, member.username)}
-                    className="event-details-remove-btn"
+          <div className="event-details-info-row">
+            <span className="event-details-info-label">{language === 'en' ? 'Status:' : 'Statut :'}</span>
+            <span>{translatedStatus[event.status] || event.status}</span>
+          </div>
+          
+          <div style={{marginTop: '20px'}}>
+            <span className="event-details-info-label">{language === 'en' ? 'Description:' : 'Description :'}</span>
+            <div className="event-details-desc-box">
+              {event.description || (language === 'en' ? 'No description provided.' : 'Aucune description fournie.')}
+            </div>
+          </div>
+        </div>
+
+        <div className="event-details-participants-section">
+          <h3 style={{marginTop: 0, marginBottom: '15px', fontSize: '1.2rem', color: 'var(--text-primary)'}}>
+            {language === 'en' ? 'Registered Participants' : 'Participants Inscrits'} ({event.members ? event.members.length : 0})
+          </h3>
+          
+          {event.members && event.members.length > 0 ? (
+            <div style={{display: 'flex', flexDirection: 'column', gap: '5px'}}>
+              {event.members.map(member => (
+                <div key={member.id} className="event-details-participant-item">
+                  <img
+                    src={member.avatar_url}
+                    alt={member.username}
+                    className="event-details-avatar"
+                  />
+                  <span
+                    onClick={() => navigate(`/${member.username}`)}
+                    className="event-details-username"
                   >
-                    {language === 'en' ? 'Remove' : 'Retirer'}
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="event-details-empty">
-            {language === 'en' ? 'No participants yet. Be the first to join!' : 'Aucun participant pour l\'instant. Soyez le premier à rejoindre !'}
-          </p>
-        )}
+                    {member.username}
+                  </span>
+
+                  {canEdit && (
+                    <button
+                      onClick={() => handleRemove(member.id, member.username)}
+                      className="event-details-remove-btn"
+                    >
+                      {language === 'en' ? 'Remove' : 'Retirer'}
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p style={{color: 'var(--text-secondary)', fontStyle: 'italic', margin: 0}}>
+              {language === 'en' ? 'No participants yet. Be the first to join!' : 'Aucun participant pour l\'instant. Soyez le premier à rejoindre !'}
+            </p>
+          )}
+        </div>
+
       </div>
     </div>
   );

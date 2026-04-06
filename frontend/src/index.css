@@ -587,116 +587,141 @@ h4 {
 /* EventDetails.css */
 /* ========================================= */
 
-.event-details-container {
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
+.event-details-embed-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  border: 1px solid var(--border-main);
+  border-radius: 8px;
+  background-color: var(--bg-primary);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  font-family: inherit;
 }
 
-.event-details-header {
+.event-details-embed-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
+  border-bottom: 1px solid var(--border-main);
+  padding-bottom: 15px;
+  margin-bottom: 20px;
 }
 
-.event-details-title { 
-  margin: 0; 
-  color: var(--primary-text);
-}
-
-.event-details-edit-btn {
-  padding: 8px 16px;
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
-}
-
-.event-details-edit-btn:hover { background-color: var(--primary-hover); }
-
-.event-details-creator-info {
-  margin: 8px 0 16px 0;
-  color: #586069;
-  font-size: 14px;
-}
-
-.event-details-link {
+.event-details-embed-title {
+  margin: 0;
   color: #0366d6;
-  cursor: pointer;
-  font-weight: 500;
-  text-decoration: none;
+  font-size: 1.8rem;
 }
 
-.event-details-link:hover { text-decoration: underline; }
+.event-details-embed-section {
+  margin-bottom: 20px;
+}
 
-.event-details-participants-list {
-  list-style: none;
-  padding: 0;
+.event-details-info-row {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.event-details-info-label {
+  font-weight: bold;
+  min-width: 120px;
+  color: var(--text-secondary);
+}
+
+.event-details-desc-box {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-main);
+  border-radius: 6px;
+  padding: 15px;
+  margin-top: 5px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.event-details-participants-section {
+  margin-top: 30px;
+  border-top: 1px solid var(--border-main);
+  padding-top: 20px;
 }
 
 .event-details-participant-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 10px;
   border: 1px solid var(--border-main);
+  border-radius: 6px;
+  margin-bottom: 10px;
   background-color: var(--bg-primary);
+  transition: background-color 0.2s;
+}
+
+.event-details-participant-item:hover {
+  background-color: var(--bg-secondary);
 }
 
 .event-details-avatar {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  object-fit: cover;
+  margin-right: 12px;
+  border: 1px solid var(--border-main);
 }
 
 .event-details-username {
-  font-weight: 500;
   cursor: pointer;
-  flex: 1;
+  color: #0366d6;
+  font-weight: 500;
+  flex-grow: 1;
 }
 
-.event-details-username:hover { text-decoration: underline; }
+.event-details-username:hover {
+  text-decoration: underline;
+}
 
 .event-details-remove-btn {
-  padding: 3px 10px;
+  padding: 6px 12px;
   background-color: #dc3545;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 0.85rem;
   transition: background-color 0.2s;
 }
 
-.event-details-remove-btn:hover { background-color: #c82333; }
-
-.event-details-empty {
-  color: #777;
-  font-style: italic;
+.event-details-remove-btn:hover {
+  background-color: #c82333;
 }
 
-.messages { padding: 20px; }
+.event-details-edit-btn {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
 
-@media (max-width: 640px) {
-  .event-details-header {
+.event-details-edit-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .event-details-embed-container {
+    margin: 20px 15px;
+    padding: 20px;
+  }
+  .event-details-embed-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
   }
   .event-details-edit-btn {
     width: 100%;
-  }
-  .event-details-participant-item {
-    flex-wrap: wrap;
   }
 }
 

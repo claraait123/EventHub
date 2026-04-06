@@ -78,7 +78,7 @@ function Navbar() {
         </Link>
 
         <Link to="/events" className="navbar-link">
-          <span>All Events</span>
+          <span>{language === 'en' ? 'All Events' : 'Tous les Événements'}</span>
         </Link>
         
         {user.is_staff && (

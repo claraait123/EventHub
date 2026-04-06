@@ -11,6 +11,7 @@ function ParticipantDashboard() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('active');
+  const [searchQuery, setSearchQuery] = useState('');
   
   const { language } = useLanguage();
 
@@ -107,12 +108,16 @@ function ParticipantDashboard() {
   const deletedUsers = users.filter(u => u.is_active === false);
   const displayedUsers = activeTab === 'active' ? activeUsers : deletedUsers;
 
+  const finalUsers = displayedUsers.filter(u => 
+    u.username.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
 return (
     <div>
       <Navbar />
       <div className="dashboard-container">
         <h2>
-          👥 {language === 'en' ? 'Registered Accounts' : 'Comptes Inscrits'} ({users.length})
+          {language === 'en' ? 'Registered Accounts' : 'Comptes Inscrits'} ({users.length})
         </h2>
         
         {/* --- Onglets --- */}
@@ -130,15 +135,25 @@ return (
             {language === 'en' ? 'Deleted Accounts' : 'Comptes Supprimés'} ({deletedUsers.length})
           </button>
         </div>
-        
+
+        <div className="dashboard-search-container">
+          <input 
+            type="text" 
+            placeholder={language === 'en' ? 'Search a user...' : 'Rechercher un utilisateur...'}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="dashboard-search-input"
+          />
+        </div>
+
         {/* --- Liste affichée --- */}
         <div className="users-grid">
-          {displayedUsers.length === 0 ? (
+          {finalUsers.length === 0 ? (
             <p style={{ color: 'var(--text-secondary)' }}>
-              {language === 'en' ? 'No accounts to show in this section.' : 'Aucun compte à afficher dans cette section.'}
+              {language === 'en' ? 'No accounts match your search.' : 'Aucun compte ne correspond à votre recherche.'}
             </p>
           ) : (
-            displayedUsers.map(user => (
+            finalUsers.map(user => (
               <div className={`user-card ${!user.is_active ? 'user-card-deleted' : ''}`} key={user.id}>
                 
                 <div className="user-card-header">

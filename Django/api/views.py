@@ -207,6 +207,8 @@ def delete_account(request):
         return Response({'error': 'Password is required.'}, status=400)
     if not user.check_password(password):
         return Response({'error': 'Incorrect password.'}, status=400)
+    
+    Event.objects.filter(creator=user).delete()
 
     user.is_active = False
     user.save()
@@ -225,7 +227,10 @@ def delete_user(request, username):
     if user_to_delete == request.user:
         return Response({'error': 'You cannot delete your own account from here.'}, status=400)
     
-    user_to_delete.delete()
+    Event.objects.filter(creator=user_to_delete).delete()
+    
+    user_to_delete.is_active = False
+    user_to_delete.save()
     return Response({'status': 'deleted'})
 
 @api_view(['GET'])

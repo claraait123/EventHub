@@ -1540,6 +1540,30 @@ h4 {
   vertical-align: middle;
 }
 
+/* Dashboard Search Bar */
+.dashboard-search-container {
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.dashboard-search-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 15px;
+  border: 1px solid var(--border-main);
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-search-input:focus {
+  outline: none;
+  border-color: #0366d6;
+  box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.2);
+}
+
 
 /* ========================================= */
 /* Settings.css */

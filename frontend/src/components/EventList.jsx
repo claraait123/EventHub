@@ -42,7 +42,7 @@ function EventList() {
 
   const filteredEvents = events.filter(event =>
     event.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  ).sort((a, b) => b.id - a.id);
 
   const handleJoin = async (eventId) => {
     try {
